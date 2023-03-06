@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rules</title>
+        <link rel="icon" href="assets/favicon.ico" sizes="32x32" type="image/png" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="rules.css" />
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+        <script src="nav.js" defer></script>
+        <script src="notification.js" defer></script>
+    </head>
+
+    <body>
+        <header class="primary-header flex">
+            <a href="/start">
+                <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" />
+            </a>
+
+            <button class="mobile-nav-toggle" aria-expanded="false"></button>
+
+            <nav>
+                <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
+                    <li class="pfp display-none text-grey">
+                        <a href="/@me">
+                            <img src="assets/placeholder-pfp.jpeg" alt="profile" />
+                        </a>
+                        <h5 id="balance-mobile" style="margin: auto 0">Balance: $</h5>
+                    </li>
+                    <li class="active">
+                        <a href="/start" class="text-white white-space-nowrap">Home</a>
+                    </li>
+                    <li>
+                        <a href="/cash-matches" class="text-white white-space-nowrap">Cash Matches</a>
+                    </li>
+                    <!--<li>
+                        <a href="/teams" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <!--<li>
+                        <a href="/leaderboard" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <li id="logout" class="flex flex-row" onclick="logout()">
+                        <img src="assets/logout-icon.svg" alt="logout" />
+                        <a href="#" class="text-white white-space-nowrap" id="logout--text">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <a class="ongoing-button button-small" id="ongoingmatchbutton" style="display: none" href="#">BACK TO GAME</a>
+
+            <div class="nav-buttons flex">
+                <button class="login-button button-small" onclick="showLogin()" id="loginbutton">LOG IN</button>
+                <button class="signup-button button-small" onclick="showSignUp()" id="signupbutton">SIGN UP</button>
+            </div>
+
+            <div class="loggedin-menu flex">
+                <button class="noti-toggle"></button>
+                <a onclick="togglePopup()">
+                    <img src="assets/placeholder-pfp.jpeg" class="profile-menu-toggle" alt="profile" />
+                </a>
+            </div>
+            <div class="profile-menu text-grey flex" id="menu_popup">
+                <h5 id="balance">Not Logged In</h5>
+                <div class="ongoing-match" id="profilelink" style="display: none">
+                    <a href="/@me">Profile</a>
+                </div>
+                <div class="logout flex" onclick="logout()" id="logoutbutton" style="display: none">
+                    <img src="assets/logout-icon.svg" alt="" />
+                    <a>Logout</a>
+                </div>
+            </div>
+            <div class="noti-container text-grey" data-visible="false">
+                <h5>Notifications</h5>
+                <div class="noti" id="no-new-noti" style="display: none">
+                    <img src="assets/Inbox.svg" alt="empty inbox" />
+                    <span>No new notifications</span>
+                </div>
+            </div>
+        </header>
+        <div class="wrapper flex">
+            <div class="signup_container">
+                <div class="blocker" onclick="hideSignUp()"></div>
+                <div class="SignUp" id="SignUp">
+                    <label for="" class="close-btn fas fa-times" onclick="hideSignUp()"></label>
+                    <div class="text">Sign Up</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username*</label>
+                            <input type="text" id="username" required />
+                        </div>
+                        <div class="data">
+                            <label>Email*</label>
+                            <input type="email" id="mail" required />
+                        </div>
+                        <div class="data">
+                            <label>Password*</label>
+                            <input name="password" id="password" type="password" onkeyup="check();" required />
+                        </div>
+                        <div class="data">
+                            <label>Repeat Password*</label>
+                            <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                            <div id="message">Passwords do not match!</div>
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="signup()">Sign Up</button>
+                            <div id="signupmessages"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="login_container">
+                <div class="blocker" onclick="hideLogin()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hideLogin()"></label>
+                    <div class="text">Log In</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username</label>
+                            <input type="text" id="username_login" required />
+                        </div>
+                        <div class="data">
+                            <label>Password</label>
+                            <input name="password" id="password_login" type="password" required />
+                        </div>
+                        <span id="forgotPassword">Forgot your password?</span>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" id="loginbutton" onclick="login()">Log In</button>
+                            <div id="messages_login"></div>
+                        </div>
+                        <span>Dont have an account?</span><span id="SignUp-refer" onclick="hideLogin(), showSignUp()">SignUp</span>
+                    </form>
+                </div>
+            </div>
+            <div class="password_container">
+                <div class="blocker" onclick="hidePWReset()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hidePWReset()"></label>
+                    <div class="text">Reset Password</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Email you registered with</label>
+                            <input name="mail" id="mail_pw" type="email" required />
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="resetPW()">Reset Password</button>
+                            <div id="messages_pw"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                const popup_signup = document.querySelector('.signup_container');
+                const popup_login = document.querySelector('.login_container');
+                const popup_reset = document.querySelector('.password_container');
+                function showSignUp() {
+                    popup_signup.classList.add('open');
+                }
+                function hideSignUp() {
+                    popup_signup.classList.remove('open');
+                }
+                function showLogin() {
+                    popup_login.classList.add('open');
+                }
+                function hideLogin() {
+                    popup_login.classList.remove('open');
+                }
+                function showPWReset() {
+                    popup_reset.classList.add('open');
+                }
+                function hidePWReset() {
+                    popup_reset.classList.remove('open');
+                }
+                function logout() {
+                    document.cookie = 'auth=; Max-Age=0';
+                    window.location.href = '/';
+                }
+                function togglePopup() {
+                    document.querySelector('.noti-container').setAttribute('data-visible', false);
+                    if (document.getElementById('menu_popup').style.display == 'none' || document.getElementById('menu_popup').style.display == '')
+                        document.getElementById('menu_popup').style.display = 'block';
+                    else document.getElementById('menu_popup').style.display = 'none';
+                }
+                async function base_data() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/start', {
+                            method: 'GET',
+                        })
+                    ).json();
+                    if (!data.error) {
+                        document.getElementById('balance').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('balance-mobile').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('profilelink').style.display = 'block';
+                        document.getElementById('logoutbutton').style.display = 'block';
+                        if (data.url) {
+                            document.getElementById('ongoingmatchbutton').style.display = 'block';
+                            document.getElementById('ongoingmatchbutton').href = data.url;
+                        }
+                        if (!data.notifications.length) document.getElementById('no-new-noti').style.display = 'block';
+                        for (let i = 0; data.notifications.length > i; i++) {
+                            const noti_parent = document.createElement('div');
+                            noti_parent.classList = 'noti';
+                            noti_parent.id = `delete_noti_${data.notifications[i].id}`;
+                            const text = document.createElement('span');
+                            text.innerHTML = data.notifications[i].string;
+                            const button_parent = document.createElement('div');
+                            button_parent.classList = 'noti-icons flex';
+                            if (data.notifications[i].type == 'TEAM_REQUEST') {
+                                const button = document.createElement('button');
+                                button.classList = 'button-small';
+                                button.innerHTML = 'Accept Invite';
+                                button.setAttribute('onclick', `acceptInvite('${data.notifications[i].metadata.id}', '${data.notifications[i].id}')`);
+                                button_parent.append(button);
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = 'assets/cross.svg';
+                                img.setAttribute('onclick', `read('${data.notifications[i].id}')`);
+                                img.id = 'cross';
+                                button_parent.append(img);
+                            }
+                            noti_parent.append(text);
+                            noti_parent.append(button_parent);
+                            document.getElementsByClassName('noti-container text-grey')[0].append(noti_parent);
+                        }
+                    }
+                }
+                base_data();
+                async function acceptInvite(id, noti_id) {
+                    let data = await (
+                        await fetch(`/api/v1/teams/${id}/join`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    read(noti_id);
+                }
+                async function read(id) {
+                    let data = await (
+                        await fetch(`/api/v1/users/@me/notifications/read/${id}`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    //if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    document.getElementById(`delete_noti_${id}`).remove();
+                }
+                var check = function () {
+                    if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                        document.getElementById('message').style.opacity = '0';
+                        document.getElementById('signup_button').disabled = false;
+                    } else {
+                        document.getElementById('message').style.opacity = '1';
+                        document.getElementById('signup_button').disabled = true;
+                    }
+                };
+                async function signup() {
+                    let data = await (
+                        await fetch('/api/v1/users/create', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username').value,
+                                password: document.getElementById('password').value,
+                                mail: document.getElementById('mail').value,
+                                referal: getQuery('referal'),
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('signupmessages').classList = `message_failed`;
+                        document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('signupmessages').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('signupmessages').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('signupmessages').classList = `message_success`;
+                    document.getElementById('signupmessages').innerHTML = `Account Created`;
+                    document.getElementById('signupmessages').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        document.getElementById('signupmessages').style.opacity = '0';
+                        hideSignUp();
+                    }, 3000);
+                }
+                async function login() {
+                    let data = await (
+                        await fetch('/api/v1/users/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username_login').value,
+                                password: document.getElementById('password_login').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_login').classList = `message_failed`;
+                        document.getElementById('messages_login').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_login').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_login').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_login').classList = `message_success`;
+                    document.getElementById('messages_login').innerHTML = `Logged In`;
+                    document.getElementById('messages_login').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                async function resetPW() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/reset-mail', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                mail: document.getElementById('mail_pw').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_pw').classList = `message_failed`;
+                        document.getElementById('messages_pw').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_pw').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_pw').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_pw').classList = `message_success`;
+                    document.getElementById('messages_pw').innerHTML = `E-Mail send`;
+                    document.getElementById('messages_pw').style.opacity = '1';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                function getQuery(param) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(param) ?? null;
+                }
+                function getCookie(name) {
+                    var nameEQ = name + '=';
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+                if (getCookie('auth')) document.getElementById('signupbutton').style.display = 'none';
+                if (getCookie('auth')) document.getElementById('loginbutton').style.display = 'none';
+            </script>
+            <div class="wrapper text-grey flex flex-column">
+                <div class="flex justify-center">
+                    <h2>Rules</h2>
+                </div>
+                <h3>Box Fight</h3>
+                <p>
+                    Playing Instructions: 1. Use Clix's map code: 7620-0771-9529 if you both you and your opponent wish to play on another map you may. If your opponent
+                    loads up a map you don't like, leave, don't play as that will count. 2. To kill your opponents, you'll have limited materials and a small construct
+                    area. Build and edit intelligently. 3. Keep track of your points; the player who reaches the score limit first wins! You must win by 2 rounds 4. If
+                    you cannot agree on what weapons to use with your opponent, use the golden pump shotgun and the blue assault rifle.
+                    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    Host is team 1 in-game while the opponents switch to Team 2. Unless you are knocked out, you cannot respawn in the middle of a round. This is to avoid
+                    players preventing siphon being awarded to their opponents.
+                </p>
+                <h3>Build Fight</h3>
+                <p>
+                    Playing Instructions: 1. Use Raider's map code: 1832-0431-4852 ,if you both you and your opponent wish to play on another map you may. If your
+                    opponent loads up a map you don't like, leave, don't play as that will count. 2. In an open map against your opponent, you will have infinite
+                    materials to build with. As you compete for height and try to destroy your opponent, protect yourself. 3. Keep track of your points; the player who
+                    reaches the score limit first wins! You must win by 2 rounds. 4. If there's disagreements as to what weapons to use, please use a golden pump shotgun
+                    and a blue assault rifle.
+                    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    A round defeat will occur from stalling and camping in bases. 1. If you box up for more than 7-8 seconds, you will immediately lose, this is a
+                    high-intensity game mode. You may only build using wood. 1. A round will be lost if you use a different material. Setup 1. To begin press the
+                    activation button, then, both players must run into the wall, you can't stay further back and sprint to cross the barrier with any kind of momentum.
+                    2. You must first ramp out; then, before shooting, you must be at least 1 layer above the maps pre-placed ramp. You are not allowed to build in the
+                    first 2 tiles above the maps pre-place ramps. Besides these rules, how you start is entirely up to you. 3. A round will be lost if you shoot before
+                    completing the setup. Buildings that have been reset 1. When you achieve maximum height, you must reset and start over with your current health. 2.
+                    When you start a new round, you must reset the builds. 3. Any additional time to reset the builds will result in a round loss. 4. Falling of the
+                    Build-fight doesn't warrant a restart, you must build back up, you are allowed to shoot your opponent who's falling off the buildfight or building up.
+                    At any given time, you may not break more than half of the construct fight down. 1. A round loss will occur if you break beyond 50%. Excessive and
+                    needless 90-ing is prohibited, and a round redo will be required. 1. The personnel at GamerMatch will carefully review and determine this. You are
+                    allowed to start by doing 90s as much as you want. However if you 90 for the sake of increasing the size of the buildfight your opponent is chopping
+                    your opponent may be awarded the round win.
+                </p>
+                <h3>General Rules:</h3>
+                <p>
+                    In all matches, the admins and moderators have the last say. ---------------------------------------------------------------------------- Platforms &
+                    Epic Names 1. If a player's platform or Epic Name is incorrect, the player has 7 minutes from the time a moderator enters the conversation to remedy
+                    the problem. 2. The game must be restarted if the player resolves the issue by switching accounts or platforms. 3. If a player changes their Epic Name
+                    on their GamerMatch account, the score remains the same and the game must be restarted. 4. Moderators have the option of allowing players to modify
+                    their Epic Name early if they like. ---------------------------------------------------------------------------------- Continue to play if you're
+                    unsure. 1. Even if you think your opponent is breaking the rules, we urge finishing the game! 2. Continuing to play a game will never result in a
+                    penalty. 3. If your report is correct, the match will either be replayed or will end in your favor.
+                    ---------------------------------------------------------------------------------- AFK and availability 1. From the start of a match, all members get
+                    15 minutes to prepare in the lobby. 2. To verify that the opposition team did not join within 15 minutes, chat and/or join log photo evidence will be
+                    necessary. 3. If any teammates are absent, the match may be played with fewer players. 4. Cancellation of the match must be agreed upon by both
+                    parties. While your opponent is AFK, you can only get one kill against them at a time.
+                    ---------------------------------------------------------------------------------- Glitches in the game 1. If a game glitch occurs, the rounds in
+                    which the game glitch occurs are not counted. 2. Exploits and two-sided game mechanics that are repeatable do not count as game glitches. 3. A game
+                    crash isn't considered a bug because it's hard to know whether it caused intentionally or not.
+                    ---------------------------------------------------------------------------------- Party rules, Host, Map & Region 1. The game is reset if the match
+                    is played in the wrong region. 2. If the host is incorrect, all completed matches count, and the non-hosting team has the option to quit and request
+                    the host after the current round. 3. If the map is incorrect, all completed matches are counted, and after the current round, the default GamerMatch
+                    recommended map can be picked. 4. It's an immediate round loss if you kick your opponent out of the party in the middle of the round.
+                    ---------------------------------------------------------------------------------- Observing / Spectating 1. Any rounds with an outside spectator will
+                    be reset, and the team that did not invite the spectator will receive a point. 2.The lobby should be made as secluded as feasible. 3. It's important
+                    to note that other players joining the lobby but not spectating will not cause a redo.
+                    ---------------------------------------------------------------------------------- Toxicity Use the !toxic command for more info in the discord
+                    server. You are not allowed to be overly toxic, this will result in a ban. However most forms of toxicity are fine, it's up to mods and admins to
+                    decide. ---------------------------------------------------------------------------------- Disconnections 1. If a team member leaves the game (or
+                    respawns) after the round has begun, the remaining members must finish the round. That round would be declared a loss if all players left. 2. The
+                    round does not count if a team member leaves before the round begins, and the game is halted. 3. All unavailable players will be unable to play for
+                    the remainder of the game if the game is paused for more than 5 minutes. 4. Disconnecting due to lag, a player's game crashing, or any other equipment
+                    issues, though unpleasant, does not result in a redo because it is hard to show whether or not it was intentional.
+                    ---------------------------------------------------------------------------------- Deception 1. Lying to your opponents regarding the rules,
+                    expectations, setup, or anything else that has a direct and clear impact on the match is not allowed. Although not advised, deceiving someone about
+                    your skill level is allowed. 2. The rule is upheld if enforceable and at least one person from each team agrees to an alternative or additional game
+                    rule or modification by voice or chat, with evidence. 3. Attempting to complete a game or report someone while one is in progress is considered
+                    deception. 4. You should immediately stop playing if you flag the match as complete or report your opponent. If you leave in the middle of a round and
+                    your report is invalid, the opposing side will receive a point, so if you're not sure, finish the match first.
+                </p>
+                <h3>Kill Race</h3>
+                <p>
+                    Playing Instructions: 1. Join your opponents in a duos lobby (if 1v1) or a squads lobby (if 2v2). 2. Play a typical Fortnite match with 100 players.
+                    3. Keep count of your kills; at the end of the series, the team with the most kills wins! If the kill score is tied, the side with the longest
+                    survival time wins. A fresh game will be played if both parties have the same number of kills and win the game.
+                    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    You may not inflict damage on your opponent(s) directly. 1. You are not allowed to cause your opponent to receive direct fall damage by demolishing
+                    their build(s). 2. You can't change or destroy your opponent's builds if doing so exposes them to enemy fire and causes damage to them. This is
+                    usually determined by whether or not damaging the construction resulted in them taking damage in the next 15 seconds. 3. You are allowed to do harm
+                    indirectly by stealing loot, and damaging vehicles. It is forbidden to interrupt healing or revivals. 1. Interrupting healing or revivals, even if
+                    unintentionally, can be game-breaking, hence it's not allowed. You are not allowed to destroy your opponent's launch pad while they are trying to use
+                    it. 1. It's oddly particular, but it's also bothersome for the person you're doing it to. 2. You may not obstruct your opponent's gameplay unduly. 3.
+                    Excessively demolishing your opponent's builds, boxing them up, or generally being intentionally unpleasant may result in a loss or ban. To pick up
+                    objects beneath a downed opponent, you must first pick them up. 1. It is not permitted to pick up your opponent for more than a second or two. 2. It
+                    is also forbidden to pick up your opponent in order to prevent their teammate from reviving them, to cause them to receive damage, or for any other
+                    reason. When you enter any sort of mobility item like a car then you understand that your opponent has the right to move you around as they wish.
+                    (NOTE: Theses rules will be available directly on the website)
+                </p>
+                <h2>Zone Wars</h2>
+                <p>
+                    Playing Instructions: 1. Use BFC's Map, code: 3825-0766-9324 if you both you and your opponent wish to play on another map you may. If your opponent
+                    loads up a map you don't like, leave, don't play as that will count. 2. You'll only have a limited amount of resources to develop, kill, and protect
+                    against your opponents. However, keep an eye out because the zone will be creeping up on you from behind. Make sure you don't stop moving! 3. Keep
+                    track of your points; the player who reaches the score limit first wins! You must win by a margin of two points. 4. If you cannot agree on what
+                    weapons to use, please use the golden pump shotgun and the blue assault rifle.
+                    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    Host is team 1 in-game while the opponents switch to Team 2. 1. All points awarded to the incorrect teams stand. Unless you are knocked out, you
+                    cannot respawn in the middle of a round. 1. This is to avoid players preventing siphon being awarded to their opponents.
+                </p>
+                <h3>Realistic</h3>
+                <p>
+                    Playing Instructions 1. Please use Pandvil's map: 6570-5231-1418 if you both you and your opponent wish to play on another map you may. If your
+                    opponent loads up a map you don't like, leave, don't play as that will count. 2. You'll spawn in a random location on the map with random loot and
+                    limited resources to build, kill, and defend against your opponents. 3. Keep track of your points; the player who reaches the score limit first wins!
+                    You must win by a margin of two points. 4. If you cannot agree on which option to pick for the loot please play with "same everything".
+                    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    Host is team 1 in-game while the opponents switch to Team 2. 1. All points awarded to the incorrect teams stand. Unless you are knocked out, you
+                    cannot respawn in the middle of a round. 1. This is to avoid offering siphon by preventing respawning. If a round ever ends while both teams are still
+                    alive, the team with the most surviving players wins. 2. If both teams are still alive at the end of a round, the team with the most surviving players
+                    wins, this rule is only applicable to maps with a countdown timer. If you end the game / back to hub after the loot has been distributed, you will
+                    lose the round.
+                </p>
+            </div>
+        </div>
+        <footer class="flex flex-column">
+            <div class="footer-content flex text-white maxwidth">
+                <a href="/start">
+                    <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" id="footer-logo" />
+                </a>
+                <ul class="secondary-navigation">
+                    <li><a href="/start" style="color: white">Home</a></li>
+                    <li><a href="/cash-matches" style="color: white">Cash Matches</a></li>
+                    <!--<li><a href="/leaderboard" style="color: white">Leaderboard</a></li>-->
+                    <!--<li><a href="/profile" style="color: white">Profile</a></li>-->
+                </ul>
+                <ul class="secondary-navigation">
+                    <li><a href="/rules" style="color: white">Rules</a></li>
+                    <li><a href="https://discord.com/invite/gamermatch" style="color: white">Support</a></li>
+                    <li><a href="/privacy" style="color: white">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" style="color: white">Terms of Service</a></li>
+                </ul>
+                <div class="socials flex">
+                    <img alt="Twitter" src="assets/Twitter.png" onclick="window.location.href='https://twitter.com/GamerMatchGG'" />
+                    <img alt="Discord" src="assets/Discord.png" onclick="window.location.href='https://discord.gg/Eb5fqBSSHm'" />
+                </div>
+            </div>
+            <span class="copyright text-grey">© 2023 GamermatchGG</span>
+        </footer>
+    </body>
+</html>
