@@ -1,5 +1,5 @@
 {
-    "mongo": "mongodb+srv://support:<password>@cluster0.sxwsy2e.mongodb.net/test",
+    "mongo": "mongodb+srv://support:ABCDE12345@cluster0.sxwsy2e.mongodb.net/?retryWrites=true&w=majority",
     "sendgrid": "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",
     "ppsecret": "EG23xKys_1siQPhv2HOFg05-UCiSwH9YKrkFDA3YEPiK0qLm1VI27DBTOUxmlkwIX0YDmgWuA6llKpOu"
 }
