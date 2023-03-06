@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Coming Soon</title>
+        <link href="./cdn/page/coming.css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    </head>
+
+    <body>
+        <div class="container_signup">
+            <div class="blocker" onclick="hideSignUp()"></div>
+            <div class="SignUp" id="SignUp">
+                <label for="" class="close-btn fas fa-times" onclick="hideSignUp()"></label>
+                <div class="text">Sign Up</div>
+                <form action="#">
+                    <div class="data">
+                        <label>Username*</label>
+                        <input type="text" id="username" required />
+                    </div>
+                    <div class="data">
+                        <label>Email*</label>
+                        <input type="email" id="mail" required />
+                    </div>
+                    <div class="data">
+                        <label>Password*</label>
+                        <input name="password" id="password" type="password" onkeyup="check();" required />
+                    </div>
+                    <div class="data">
+                        <label>Repeat Password*</label>
+                        <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                        <div id="message">Passwords do not match!</div>
+                    </div>
+                    <div class="btn">
+                        <div class="inner"></div>
+                        <button type="button" id="signup_button" onclick="signup()" disabled>Sign Up</button>
+                        <div id="signupmessages"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container_login">
+            <div class="blocker" onclick="hideLogin()"></div>
+            <div class="SignUp" id="LogIn">
+                <label for="" class="close-btn fas fa-times" onclick="hideLogin()"></label>
+                <div class="text">Log In</div>
+                <form action="#">
+                    <div class="data">
+                        <label>Username/Email</label>
+                        <input type="text" id="username_login" required />
+                    </div>
+                    <div class="data">
+                        <label>Password*</label>
+                        <input name="password" id="password_login" type="password" required />
+                    </div>
+                    <div class="btn">
+                        <div class="inner"></div>
+                        <button type="button" id="login_button" onclick="login()">Login</button>
+                        <div id="messages_login"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            const popup_signup = document.querySelector('.container_signup');
+            const popup_login = document.querySelector('.container_login');
+            function showSignUp() {
+                popup_signup.classList.add('open');
+            }
+            function hideSignUp() {
+                popup_signup.classList.remove('open');
+            }
+            function showLogin() {
+                popup_login.classList.add('open');
+            }
+            function hideLogin() {
+                popup_login.classList.remove('open');
+            }
+            var check = function () {
+                if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                    document.getElementById('message').style.opacity = '0';
+                    document.getElementById('signup_button').disabled = false;
+                } else {
+                    document.getElementById('message').style.opacity = '1';
+                    document.getElementById('signup_button').disabled = true;
+                }
+            };
+            async function signup() {
+                let data = await (
+                    await fetch('/api/v1/users/create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: document.getElementById('username').value,
+                            password: document.getElementById('password').value,
+                            mail: document.getElementById('mail').value,
+                            referal: getQuery('referal'),
+                        }),
+                    })
+                ).json();
+                if (data.errors) {
+                    document.getElementById('signupmessages').classList = `message_failed`;
+                    document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                    document.getElementById('signupmessages').style.opacity = '1';
+                    setTimeout(() => {
+                        document.getElementById('signupmessages').style.opacity = '0';
+                    }, 3000);
+                    return;
+                }
+                document.getElementById('signupmessages').classList = `message_success`;
+                document.getElementById('signupmessages').innerHTML = `Account Created`;
+                document.getElementById('signupmessages').style.opacity = '1';
+                document.getElementById('signinbutton').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('signupmessages').style.opacity = '0';
+                    hideSignUp();
+                }, 3000);
+            }
+            async function login() {
+                let data = await (
+                    await fetch('/api/v1/users/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: document.getElementById('username_login').value,
+                            password: document.getElementById('password_login').value,
+                        }),
+                    })
+                ).json();
+                if (data.errors) {
+                    document.getElementById('messages_login').classList = `message_failed`;
+                    document.getElementById('messages_login').innerHTML = `Error: ${data.errors[0].message}`;
+                    document.getElementById('messages_login').style.opacity = '1';
+                    setTimeout(() => {
+                        document.getElementById('messages_login').style.opacity = '0';
+                    }, 3000);
+                    return;
+                }
+                document.getElementById('messages_login').classList = `message_success`;
+                document.getElementById('messages_login').innerHTML = `Logged In`;
+                document.getElementById('messages_login').style.opacity = '1';
+                document.getElementById('signinbutton').style.opacity = '0';
+                setTimeout(() => {
+                    if (data.role == 'admin' || data.role == 'beta') window.location.href = '/start';
+                }, 3000);
+            }
+            function getQuery(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param) ?? null;
+            }
+            function getCookie(name) {
+                var nameEQ = name + '=';
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+        </script>
+        <div class="content">
+            <div class="wrapper">
+                <div class="navBar">
+                    <img src="./cdn/page/Gamermatch Logo.png" alt="Twitter" class="GamermatchLogo" />
+                    <div class="align" style="display: flex">
+                        <button class="signUpBtn" type="button" id="loginbutton" onclick="showLogin()" style="background-color: white; color: black; margin-right: 5px">
+                            Login [BETA]
+                        </button>
+                        <button class="signUpBtn" type="button" id="signinbutton" onclick="showSignUp()">Sign Up</button>
+                    </div>
+                </div>
+                <div class="coming-soon-container1">
+                    <div class="leftSection">
+                        <div class="Title">
+                            <h1>Coming Soon</h1>
+                        </div>
+                        <div class="Timer">
+                            <div id="clockdiv">
+                                <div>
+                                    <span class="days" id="day"></span>
+                                    <div class="smalltext">Days</div>
+                                </div>
+                                <div>
+                                    <span class="hours" id="hour"></span>
+                                    <div class="smalltext">Hours</div>
+                                </div>
+                                <div>
+                                    <span class="minutes" id="minute"></span>
+                                    <div class="smalltext">Minutes</div>
+                                </div>
+                                <div>
+                                    <span class="seconds" id="second"></span>
+                                    <div class="smalltext">Seconds</div>
+                                </div>
+                            </div>
+
+                            <p id="demo"></p>
+
+                            <script>
+                                var deadline = new Date('Nov 5, 2022 18:00:00').getTime();
+
+                                function getQuery(param) {
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    return urlParams.get(param) ?? null;
+                                }
+                                function getCookie(name) {
+                                    var nameEQ = name + '=';
+                                    var ca = document.cookie.split(';');
+                                    for (var i = 0; i < ca.length; i++) {
+                                        var c = ca[i];
+                                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                                    }
+                                    return null;
+                                }
+                                if (getCookie('auth')) {
+                                    async function checkadmin() {
+                                        let data = await (
+                                            await fetch('/api/v1/users/@me', {
+                                                method: 'GET',
+                                            })
+                                        ).json();
+                                    }
+                                    checkadmin();
+                                }
+                                if (getCookie('auth')) document.getElementById('signinbutton').style.opacity = '0';
+                                if (getQuery('signup') && getQuery('signup') == 'true' && getCookie('created') == undefined) showSignUp();
+
+                                var x = setInterval(function () {
+                                    var now = new Date().getTime();
+                                    var t = deadline - now;
+                                    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                                    var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                                    var seconds = Math.floor((t % (1000 * 60)) / 1000);
+                                    document.getElementById('day').innerHTML = days < 10 ? '0' + days : days;
+                                    document.getElementById('hour').innerHTML = hours < 10 ? '0' + hours : hours;
+                                    document.getElementById('minute').innerHTML = minutes < 10 ? '0' + minutes : minutes;
+                                    document.getElementById('second').innerHTML = seconds < 10 ? '0' + seconds : seconds;
+                                    if (t < 0) {
+                                        clearInterval(x);
+                                        document.getElementById('demo').innerHTML = 'TIME UP';
+                                        document.getElementById('day').innerHTML = '0';
+                                        document.getElementById('hour').innerHTML = '0';
+                                        document.getElementById('minute').innerHTML = '0';
+                                        document.getElementById('second').innerHTML = '0';
+                                    }
+                                }, 1000);
+                            </script>
+                        </div>
+                    </div>
+                    <div class="rightSection">
+                        <img src="./cdn/page/Cashmatch Illustration 2.png" alt="Cash Match Image" class="CashmatchIllustration" />
+                    </div>
+                </div>
+                <div class="Socials">
+                    <a href="https://twitter.com/GamerMatchGG" target="_blank">
+                        <img src="./cdn/page/twitter.png" alt="Twitter" class="Twitter" />
+                    </a>
+                    <a href="https://discord.gg/Eb5fqBSSHm" target="_blank">
+                        <img src="./cdn/page/discord.png" alt="Discord" class="Discord" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

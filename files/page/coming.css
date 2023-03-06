@@ -1,0 +1,415 @@
+html,
+body {
+    background-color: #191919;
+    padding: 0;
+    margin: 0;
+    font-family: poppins;
+    height: 100vh;
+    width: 100%;
+    color: white;
+    position: relative;
+    transition: all 2s ease-out;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    margin: 0px;
+}
+
+.container_signup {
+    display: none;
+    position: fixed;
+}
+
+.container_signup.open {
+    display: block;
+}
+
+.container_login {
+    display: none;
+    position: fixed;
+}
+
+.container_login.open {
+    display: block;
+}
+
+.blocker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: ' ';
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.SignUp {
+    background-color: #2a2a2a;
+    padding: 3em;
+    width: 50vw;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    max-width: 450px;
+    transform: translate(-50%, -50%);
+}
+
+.SignUp .close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 1em;
+}
+
+.SignUp .close-btn:hover {
+    color: #ec4e20;
+}
+
+.SignUp .text {
+    font-size: 2em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.SignUp form {
+    margin: -20px;
+}
+
+.SignUp form .data {
+    height: 45px;
+    width: 100%;
+    margin: 50px 0;
+}
+
+form .data label {
+    font-size: 0.9em;
+}
+
+form .data input {
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+    font-size: 17px;
+    border-radius: 8px;
+    background-color: #191919;
+    border: none;
+    color: #f6f6f6;
+    margin-top: 5px;
+}
+
+form .btn {
+    margin: 70px 0 20px 0;
+    height: 45px;
+    width: 100%;
+}
+
+form .btn button {
+    width: 100%;
+    height: 3em;
+    align-items: center;
+    background-color: #ec4e20;
+    border-radius: 8px;
+    border: none;
+    color: #f6f6f6;
+    font-size: 1em;
+}
+form .btn button:disabled {
+    width: 100%;
+    height: 3em;
+    align-items: center;
+    background-color: #363636;
+    border-radius: 8px;
+    border: none;
+    color: #f6f6f6;
+    font-size: 1em;
+}
+
+form .btn button:hover {
+    box-shadow: 0px 0px 20px 0px rgba(236, 78, 32, 0.59);
+}
+
+form .btn button:hover:disabled {
+    box-shadow: 0px 0px 0px 0px rgba(66, 66, 66, 0.59);
+}
+
+#message {
+    opacity: 0;
+    padding: 10px;
+    width: 13em;
+    text-align: center;
+    background: rgb(237, 142, 142);
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    transition: opacity 200ms ease-out;
+}
+
+.message_success {
+    opacity: 0;
+    padding: 10px;
+    width: 13em;
+    text-align: center;
+    background: rgb(0, 255, 64);
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    transition: opacity 200ms ease-out;
+}
+
+.message_failed {
+    opacity: 0;
+    padding: 10px;
+    width: 13em;
+    text-align: center;
+    background: rgb(237, 142, 142);
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    transition: opacity 200ms ease-out;
+}
+
+.content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    align-content: center;
+    margin: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2em;
+    max-width: 2400px;
+}
+
+.coming-soon-container1 {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.leftSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: 50%;
+    gap: 2em;
+}
+
+.signUpBtn {
+    color: #f6f6f6;
+    height: 3em;
+    width: 10em;
+    align-content: center;
+    background-color: #ec4e20;
+    border-radius: 8px;
+    border: none;
+    justify-self: flex-end;
+}
+
+.signUpBtn:hover {
+    box-shadow: 0px 0px 20px 0px rgba(236, 78, 32, 0.59);
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.CashmatchIllustration {
+    width: 100%;
+    max-width: 900px;
+}
+
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    top: 4em;
+    left: 4em;
+}
+
+.GamermatchLogo {
+    width: 50px;
+    object-fit: cover;
+}
+
+.Title {
+    color: #f6f6f6;
+    font-size: 3em;
+    line-height: 200%;
+    cursor: default;
+}
+
+#clockdiv {
+    font-family: sans-serif;
+    display: flex;
+    font-weight: 100;
+    text-align: center;
+    gap: 16px;
+    cursor: default;
+}
+
+#clockdiv > div {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    font-size: 4em;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+}
+
+#clockdiv div > span {
+    padding: 5px;
+    border-radius: 3px;
+    display: flex;
+    color: #ec4e20;
+}
+
+.smalltext {
+    padding-top: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f6f6f6;
+}
+
+.Socials {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: center;
+    height: 50px;
+}
+
+.Twitter {
+    width: 30px;
+    object-fit: cover;
+}
+
+.Twitter:hover {
+    filter: drop-shadow(0 0 10px rgba(236, 78, 32, 0.59));
+}
+
+.Discord {
+    width: 30px;
+    object-fit: cover;
+}
+
+.Discord:hover {
+    filter: drop-shadow(0 0 10px rgba(236, 78, 32, 0.59));
+}
+
+#day:hover {
+    text-shadow: 0 0 30px rgba(236, 78, 32, 0.59);
+}
+
+#hour:hover {
+    text-shadow: 0 0 30px rgba(236, 78, 32, 0.59);
+}
+
+#minute:hover {
+    text-shadow: 0 0 30px rgba(236, 78, 32, 0.59);
+}
+
+#second:hover {
+    text-shadow: 0 0 30px rgba(236, 78, 32, 0.59);
+}
+
+@media only screen and (max-width: 1300px) {
+    .rightSection {
+        display: none;
+    }
+
+    .coming-soon-container1 {
+        width: 100%;
+    }
+
+    .leftSection {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .Title {
+        text-align: center;
+    }
+
+    #clockdiv {
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .content {
+        padding: 2em;
+    }
+
+    #clockdiv {
+        font-family: sans-serif;
+        color: #fff;
+        display: flex;
+        font-weight: 100;
+        text-align: center;
+        gap: 16px;
+        cursor: default;
+    }
+
+    #clockdiv > div {
+        font-size: 2em;
+    }
+
+    .leftSection {
+        gap: 3em;
+    }
+
+    .Title {
+        padding: 0;
+        font-size: 1.5em;
+    }
+
+    .navBar {
+        top: 2em;
+        left: 2em;
+    }
+
+    .content {
+        height: 95vh;
+    }
+}
+
+@media only screen and (min-width: 2000px) {
+    .rightSection {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Gamermatch.gg</title>
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+
+        <style>
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            th,
+            td {
+                padding: 10px 20px;
+                border: 1px solid #000;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <script>
+            let table = document.createElement('table');
+            let thead = document.createElement('thead');
+            let tbody = document.createElement('tbody');
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            // Adding the entire table to the body tag
+            document.getElementById('body').appendChild(table);
+
+            // Creating and adding data to first row of the table
+            let row_1 = document.createElement('tr');
+            let heading_1 = document.createElement('th');
+            heading_1.innerHTML = 'User ID';
+            let heading_2 = document.createElement('th');
+            heading_2.innerHTML = 'User Name';
+            let heading_3 = document.createElement('th');
+            heading_3.innerHTML = 'Original Amount';
+            let heading_4 = document.createElement('th');
+            heading_4.innerHTML = 'PayPal Mail';
+            let heading_5 = document.createElement('th');
+            heading_5.innerHTML = 'Fee';
+            let heading_6 = document.createElement('th');
+            heading_6.innerHTML = 'Payout';
+            let heading_7 = document.createElement('th');
+            heading_7.innerHTML = 'Date';
+            let heading_8 = document.createElement('th');
+            heading_8.innerHTML = 'Processed';
+            let heading_9 = document.createElement('th');
+            heading_9.innerHTML = 'Processed Date';
+            let heading_10 = document.createElement('th');
+            heading_10.innerHTML = 'Processed Admin';
+
+            row_1.appendChild(heading_1);
+            row_1.appendChild(heading_2);
+            row_1.appendChild(heading_3);
+            row_1.appendChild(heading_4);
+            row_1.appendChild(heading_5);
+            row_1.appendChild(heading_6);
+            row_1.appendChild(heading_7);
+            row_1.appendChild(heading_8);
+            row_1.appendChild(heading_9);
+            row_1.appendChild(heading_10);
+            thead.appendChild(row_1);
+
+            async function test() {
+                let data = await (await fetch('/api/v1/withdraws/list')).json();
+                for (let i = 0; data.length > i; i++) {
+                    let row = document.createElement('tr');
+                    let row_data_1 = document.createElement('td');
+                    row_data_1.innerHTML = data[i].user_id;
+                    let row_data_2 = document.createElement('td');
+                    row_data_2.innerHTML = data[i].username;
+                    let row_data_3 = document.createElement('td');
+                    row_data_3.innerHTML = data[i].original_amount;
+                    let row_data_4 = document.createElement('td');
+                    row_data_4.innerHTML = data[i].mail;
+                    let row_data_5 = document.createElement('td');
+                    row_data_5.innerHTML = data[i].fee;
+                    let row_data_6 = document.createElement('td');
+                    row_data_6.innerHTML = data[i].payout;
+                    let row_data_7 = document.createElement('td');
+                    row_data_7.innerHTML = data[i].date;
+                    let row_data_8 = document.createElement('td');
+                    let checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `${data[i].id}_check`;
+                    checkbox.checked = data[i].processed.state;
+                    checkbox.setAttribute('onclick', `update('${data[i].id}')`);
+                    row_data_8.append(checkbox);
+                    let row_data_9 = document.createElement('td');
+                    row_data_9.innerHTML = data[i].processed.date;
+                    row_data_9.id = `${data[i].id}_date`;
+                    let row_data_10 = document.createElement('td');
+                    row_data_10.innerHTML = data[i].processed.user;
+                    row_data_10.id = `${data[i].id}_user`;
+                    row.appendChild(row_data_1);
+                    row.appendChild(row_data_2);
+                    row.appendChild(row_data_3);
+                    row.appendChild(row_data_4);
+                    row.appendChild(row_data_5);
+                    row.appendChild(row_data_6);
+                    row.appendChild(row_data_7);
+                    row.appendChild(row_data_8);
+                    row.appendChild(row_data_9);
+                    row.appendChild(row_data_10);
+                    tbody.appendChild(row);
+                }
+            }
+            test();
+
+            async function update(id) {
+                let data = await (
+                    await fetch(`/api/v1/withdraws/${id}/update/${document.getElementById(`${id}_check`).checked}`, {
+                        method: 'POST',
+                    })
+                ).json();
+                if (data.errors) {
+                    alert(`Fehler: ${data.errors[0].message}`);
+                    return window.location.reload();
+                }
+                document.getElementById(`${id}_date`).innerHTML = document.getElementById(`${id}_check`).checked ? new Date().toISOString() : 'N.A';
+                document.getElementById(`${id}_user`).innerHTML = document.getElementById(`${id}_check`).checked ? 'You' : 'N.A';
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Gamermatch.gg</title>
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+
+        <style>
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            th,
+            td {
+                padding: 10px 20px;
+                border: 1px solid #000;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <form>
+            <label for="code">Code</label><br />
+            <input type="text" id="code" name="code" /><br />
+            <button type="button" onClick="createCode()">Submit</button>
+        </form>
+        <br />
+        <br />
+        <script>
+            let table = document.createElement('table');
+            let thead = document.createElement('thead');
+            let tbody = document.createElement('tbody');
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            // Adding the entire table to the body tag
+            document.getElementById('body').appendChild(table);
+
+            // Creating and adding data to first row of the table
+            let row_1 = document.createElement('tr');
+            let heading_1 = document.createElement('th');
+            heading_1.innerHTML = 'Code';
+            let heading_2 = document.createElement('th');
+            heading_2.innerHTML = 'Usage';
+            let heading_3 = document.createElement('th');
+            heading_3.innerHTML = 'Used by';
+
+            row_1.appendChild(heading_1);
+            row_1.appendChild(heading_2);
+            row_1.appendChild(heading_3);
+            thead.appendChild(row_1);
+
+            async function test() {
+                let data = await (await fetch('/api/v1/referals/list')).json();
+                for (let i = 0; data.length > i; i++) {
+                    let row = document.createElement('tr');
+                    let row_data_1 = document.createElement('td');
+                    row_data_1.innerHTML = data[i].code;
+                    let row_data_2 = document.createElement('td');
+                    row_data_2.innerHTML = data[i].usage;
+                    let row_data_3 = document.createElement('td');
+                    row_data_3.innerHTML = data[i].used_by.length ? data[i].used_by.map(i => i.name).join(' | ') : 'No One yet';
+                    row.appendChild(row_data_1);
+                    row.appendChild(row_data_2);
+                    row.appendChild(row_data_3);
+                    tbody.appendChild(row);
+                }
+            }
+            test();
+
+            async function createCode() {
+                let data = await (
+                    await fetch('/api/v1/referals/create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({code: document.getElementById('code').value}),
+                    })
+                ).json();
+                if (data.errors) {
+                    alert(`Fehler: ${data.errors[0].message}`);
+                    return window.location.reload();
+                }
+                alert(`Code erstellt`);
+                navigator.clipboard.writeText(`/signup?referal=${document.getElementById('code').value}`);
+                window.location.reload();
+            }
+        </script>
+    </body>
+</html>
