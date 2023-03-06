@@ -5,8 +5,8 @@
     --color-secondary-dark: #191919;
     --color-secondary-2a2a2a: #2a2a2a;
     --color-secondary-light: #484848;
-    --color-primary: #ec4e20;
-    --color-primary-light: #ff814d;
+    --color-primary: #3bdcff;
+    --color-primary-light: #3bdcff;
     --color-primary-dark: #b21000;
 }
 
@@ -21,7 +21,7 @@ body {
     padding: 0;
     margin: 0;
     background-color: var(--color-secondary);
-    background-image: url(assets/FortniteC3S4.jpeg);
+    background-image: url(assets/backg1.jpg);
     background-repeat: no-repeat;
     background-position: 50% 0;
     backdrop-filter: brightness(40%);
