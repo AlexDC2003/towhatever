@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Gamermatch</title>
+        <meta property="og:title" content="Gamermatch" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="/index.css" />
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+        <script src="nav.js" defer></script>
+        <script src="notification.js" defer></script>
+    </head>
+
+    <body style="height: 100vh">
+        <div class="content" style="height: 100%">
+            <div class="wrapper">
+                <div class="SignUp" id="SignUp">
+                    <div class="text">Reset Password</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>New Password*</label>
+                            <input name="password" id="password" type="password" onkeyup="check();" required />
+                        </div>
+                        <div class="data">
+                            <label>Repeat New Password*</label>
+                            <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                            <div id="message">Passwords do not match!</div>
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" id="signup_button" onclick="resetPW()">Reset Password</button>
+                            <div id="signupmessages"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            var check = function () {
+                if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                    document.getElementById('message').style.opacity = '0';
+                    document.getElementById('signup_button').disabled = false;
+                } else {
+                    document.getElementById('message').style.opacity = '1';
+                    document.getElementById('signup_button').disabled = true;
+                }
+            };
+            function getQuery(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param) ?? null;
+            }
+            async function resetPW() {
+                if (!document.getElementById('password').value) return;
+                let data = await (
+                    await fetch('/api/v1/users/@me/reset', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            password: document.getElementById('password').value,
+                            id: getQuery('id'),
+                        }),
+                    })
+                ).json();
+                if (data.errors) {
+                    document.getElementById('signupmessages').classList = `message_failed`;
+                    document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                    document.getElementById('signupmessages').style.opacity = '1';
+                    setTimeout(() => {
+                        document.getElementById('signupmessages').style.opacity = '0';
+                    }, 3000);
+                    return;
+                }
+                document.getElementById('signupmessages').classList = `message_success`;
+                document.getElementById('signupmessages').innerHTML = `Password Reset`;
+                setTimeout(() => {
+                    window.location.href = '/start';
+                }, 3000);
+            }
+        </script>
+        <footer class="flex flex-column">
+            <div class="footer-content flex text-white maxwidth">
+                <a href="/start">
+                    <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" id="footer-logo" />
+                </a>
+                <ul class="secondary-navigation">
+                    <li><a href="/start" style="color: white">Home</a></li>
+                    <li><a href="/cash-matches" style="color: white">Cash Matches</a></li>
+                    <!--<li><a href="/leaderboard" style="color: white">Leaderboard</a></li>-->
+                    <!--<li><a href="/profile" style="color: white">Profile</a></li>-->
+                </ul>
+                <ul class="secondary-navigation">
+                    <li><a href="/rules" style="color: white">Rules</a></li>
+                    <li><a href="https://discord.com/invite/gamermatch" style="color: white">Support</a></li>
+                    <li><a href="/privacy" style="color: white">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" style="color: white">Terms of Service</a></li>
+                </ul>
+                <div class="socials flex">
+                    <img alt="Twitter" src="assets/Twitter.png" onclick="window.location.href='https://twitter.com/GamerMatchGG'" />
+                    <img alt="Discord" src="assets/Discord.png" onclick="window.location.href='https://discord.gg/Eb5fqBSSHm'" />
+                </div>
+            </div>
+            <span class="copyright text-grey">© 2023 GamermatchGG</span>
+        </footer>
+    </body>
+</html>

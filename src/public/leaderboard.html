@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Leaderboard - Gamermatch</title>
+        <meta property="og:title" content="Leaderboard - Gamermatch" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="/leaderboard.css" />
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+        <script src="nav.js" defer></script>
+        <script src="notification.js" defer></script>
+    </head>
+
+    <body>
+        <header class="primary-header flex">
+            <a href="/start">
+                <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" />
+            </a>
+
+            <button class="mobile-nav-toggle" aria-expanded="false"></button>
+
+            <nav>
+                <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
+                    <li class="pfp display-none text-grey">
+                        <a href="/@me">
+                            <img src="assets/placeholder-pfp.jpeg" alt="profile" />
+                        </a>
+                        <h5 id="balance-mobile" style="margin: auto 0">Balance: $</h5>
+                    </li>
+                    <li class="active">
+                        <a href="/start" class="text-white white-space-nowrap">Home</a>
+                    </li>
+                    <li>
+                        <a href="/cash-matches" class="text-white white-space-nowrap">Cash Matches</a>
+                    </li>
+                    <!--<li>
+                        <a href="/teams" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <!--<li>
+                        <a href="/leaderboard" class="active text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <li id="logout" class="flex flex-row" onclick="logout()">
+                        <img src="assets/logout-icon.svg" alt="logout" />
+                        <a href="#" class="text-white white-space-nowrap" id="logout--text">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <a class="ongoing-button button-small" id="ongoingmatchbutton" style="display: none" href="#">BACK TO GAME</a>
+
+            <div class="nav-buttons flex">
+                <button class="login-button button-small" onclick="showLogin()" id="loginbutton">LOG IN</button>
+                <button class="signup-button button-small" onclick="showSignUp()" id="signupbutton">SIGN UP</button>
+            </div>
+
+            <div class="loggedin-menu flex">
+                <button class="noti-toggle"></button>
+                <a onclick="togglePopup()">
+                    <img src="assets/placeholder-pfp.jpeg" class="profile-menu-toggle" alt="profile" />
+                </a>
+            </div>
+            <div class="profile-menu text-grey flex" id="menu_popup">
+                <h5 id="balance">Not Logged In</h5>
+                <div class="ongoing-match" id="profilelink" style="display: none">
+                    <a href="/@me">Profile</a>
+                </div>
+
+                <div class="logout flex" onclick="logout()" id="logoutbutton" style="display: none">
+                    <img src="assets/logout-icon.svg" alt="" />
+                    <a>Logout</a>
+                </div>
+            </div>
+            <div class="noti-container text-grey" data-visible="false">
+                <h5>Notifications</h5>
+                <div class="noti" id="no-new-noti" style="display: none">
+                    <img src="assets/Inbox.svg" alt="empty inbox" />
+                    <span>No new notifications</span>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div class="content">
+                <div class="signup_container">
+                    <div class="blocker" onclick="hideSignUp()"></div>
+                    <div class="SignUp" id="SignUp">
+                        <label for="" class="close-btn fas fa-times" onclick="hideSignUp()"></label>
+                        <div class="text">Sign Up</div>
+                        <form action="#">
+                            <div class="data">
+                                <label>Username*</label>
+                                <input type="text" id="username" required />
+                            </div>
+                            <div class="data">
+                                <label>Email*</label>
+                                <input type="email" id="mail" required />
+                            </div>
+                            <div class="data">
+                                <label>Password*</label>
+                                <input name="password" id="password" type="password" onkeyup="check();" required />
+                            </div>
+                            <div class="data">
+                                <label>Repeat Password*</label>
+                                <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                                <div id="message">Passwords do not match!</div>
+                            </div>
+                            <div class="btn">
+                                <div class="inner"></div>
+                                <button type="button" onclick="signup()">Sign Up</button>
+                                <div id="signupmessages"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="login_container">
+                    <div class="blocker" onclick="hideLogin()"></div>
+                    <div class="Login" id="Login">
+                        <label for="" class="close-btn fas fa-times" onclick="hideLogin()"></label>
+                        <div class="text">Log In</div>
+                        <form action="#">
+                            <div class="data">
+                                <label>Username</label>
+                                <input type="text" id="username_login" required />
+                            </div>
+                            <div class="data">
+                                <label>Password</label>
+                                <input name="password" id="password_login" type="password" required />
+                            </div>
+                            <span id="forgotPassword">Forgot your password?</span>
+                            <div class="btn">
+                                <div class="inner"></div>
+                                <button type="button" id="loginbutton" onclick="login()">Log In</button>
+                                <div id="messages_login"></div>
+                            </div>
+                            <span>Dont have an account?</span><span id="SignUp-refer" onclick="hideLogin(), showSignUp()">SignUp</span>
+                        </form>
+                    </div>
+                </div>
+                <div class="password_container">
+                    <div class="blocker" onclick="hidePWReset()"></div>
+                    <div class="Login" id="Login">
+                        <label for="" class="close-btn fas fa-times" onclick="hidePWReset()"></label>
+                        <div class="text">Reset Password</div>
+                        <form action="#">
+                            <div class="data">
+                                <label>Email you registered with</label>
+                                <input name="mail" id="mail_pw" type="email" required />
+                            </div>
+                            <div class="btn">
+                                <div class="inner"></div>
+                                <button type="button" onclick="resetPW()">Reset Password</button>
+                                <div id="messages_pw"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    const popup_signup = document.querySelector('.signup_container');
+                    const popup_login = document.querySelector('.login_container');
+                    const popup_reset = document.querySelector('.password_container');
+                    function showSignUp() {
+                        popup_signup.classList.add('open');
+                    }
+                    function hideSignUp() {
+                        popup_signup.classList.remove('open');
+                    }
+                    function showLogin() {
+                        popup_login.classList.add('open');
+                    }
+                    function hideLogin() {
+                        popup_login.classList.remove('open');
+                    }
+                    function showPWReset() {
+                        popup_reset.classList.add('open');
+                    }
+                    function hidePWReset() {
+                        popup_reset.classList.remove('open');
+                    }
+                    function logout() {
+                        document.cookie = 'auth=; Max-Age=0';
+                        window.location.href = '/';
+                    }
+                    function togglePopup() {
+                        document.querySelector('.noti-container').setAttribute('data-visible', false);
+                        if (document.getElementById('menu_popup').style.display == 'none' || document.getElementById('menu_popup').style.display == '')
+                            document.getElementById('menu_popup').style.display = 'block';
+                        else document.getElementById('menu_popup').style.display = 'none';
+                    }
+                    async function base_data() {
+                        let data = await (
+                            await fetch('/api/v1/users/@me/start', {
+                                method: 'GET',
+                            })
+                        ).json();
+                        if (!data.error) {
+                            document.getElementById('balance').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                            document.getElementById('balance-mobile').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                            document.getElementById('profilelink').style.display = 'block';
+                            document.getElementById('logoutbutton').style.display = 'block';
+                            if (data.url) {
+                                document.getElementById('ongoingmatchbutton').style.display = 'block';
+                                document.getElementById('ongoingmatchbutton').href = data.url;
+                            }
+                            if (!data.notifications.length) document.getElementById('no-new-noti').style.display = 'block';
+                            for (let i = 0; data.notifications.length > i; i++) {
+                                const noti_parent = document.createElement('div');
+                                noti_parent.classList = 'noti';
+                                noti_parent.id = `delete_noti_${data.notifications[i].id}`;
+                                const text = document.createElement('span');
+                                text.innerHTML = data.notifications[i].string;
+                                const button_parent = document.createElement('div');
+                                button_parent.classList = 'noti-icons flex';
+                                if (data.notifications[i].type == 'TEAM_REQUEST') {
+                                    const button = document.createElement('button');
+                                    button.classList = 'button-small';
+                                    button.innerHTML = 'Accept Invite';
+                                    button.setAttribute('onclick', `acceptInvite('${data.notifications[i].metadata.id}', '${data.notifications[i].id}')`);
+                                    button_parent.append(button);
+                                } else {
+                                    const img = document.createElement('img');
+                                    img.src = 'assets/cross.svg';
+                                    img.setAttribute('onclick', `read('${data.notifications[i].id}')`);
+                                    img.id = 'cross';
+                                    button_parent.append(img);
+                                }
+                                noti_parent.append(text);
+                                noti_parent.append(button_parent);
+                                document.getElementsByClassName('noti-container text-grey')[0].append(noti_parent);
+                            }
+                        }
+                    }
+                    base_data();
+                    async function acceptInvite(id, noti_id) {
+                        let data = await (
+                            await fetch(`/api/v1/teams/${id}/join`, {
+                                method: 'POST',
+                            })
+                        ).json();
+                        if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                        read(noti_id);
+                    }
+                    async function read(id) {
+                        let data = await (
+                            await fetch(`/api/v1/users/@me/notifications/read/${id}`, {
+                                method: 'POST',
+                            })
+                        ).json();
+                        //if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                        document.getElementById(`delete_noti_${id}`).remove();
+                    }
+                    var check = function () {
+                        if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                            document.getElementById('message').style.opacity = '0';
+                            document.getElementById('signup_button').disabled = false;
+                        } else {
+                            document.getElementById('message').style.opacity = '1';
+                            document.getElementById('signup_button').disabled = true;
+                        }
+                    };
+                    async function signup() {
+                        let data = await (
+                            await fetch('/api/v1/users/create', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    username: document.getElementById('username').value,
+                                    password: document.getElementById('password').value,
+                                    mail: document.getElementById('mail').value,
+                                    referal: getQuery('referal'),
+                                }),
+                            })
+                        ).json();
+                        if (data.errors) {
+                            document.getElementById('signupmessages').classList = `message_failed`;
+                            document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                            document.getElementById('signupmessages').style.opacity = '1';
+                            setTimeout(() => {
+                                document.getElementById('signupmessages').style.opacity = '0';
+                            }, 3000);
+                            return;
+                        }
+                        document.getElementById('signupmessages').classList = `message_success`;
+                        document.getElementById('signupmessages').innerHTML = `Account Created`;
+                        document.getElementById('signupmessages').style.opacity = '1';
+                        document.getElementById('signupbutton').style.display = 'none';
+                        setTimeout(() => {
+                            document.getElementById('signupmessages').style.opacity = '0';
+                            hideSignUp();
+                        }, 3000);
+                    }
+                    async function login() {
+                        let data = await (
+                            await fetch('/api/v1/users/login', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    username: document.getElementById('username_login').value,
+                                    password: document.getElementById('password_login').value,
+                                }),
+                            })
+                        ).json();
+                        if (data.errors) {
+                            document.getElementById('messages_login').classList = `message_failed`;
+                            document.getElementById('messages_login').innerHTML = `Error: ${data.errors[0].message}`;
+                            document.getElementById('messages_login').style.opacity = '1';
+                            setTimeout(() => {
+                                document.getElementById('messages_login').style.opacity = '0';
+                            }, 3000);
+                            return;
+                        }
+                        document.getElementById('messages_login').classList = `message_success`;
+                        document.getElementById('messages_login').innerHTML = `Logged In`;
+                        document.getElementById('messages_login').style.opacity = '1';
+                        document.getElementById('signupbutton').style.display = 'none';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    }
+                    async function resetPW() {
+                        let data = await (
+                            await fetch('/api/v1/users/@me/reset-mail', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    mail: document.getElementById('mail_pw').value,
+                                }),
+                            })
+                        ).json();
+                        if (data.errors) {
+                            document.getElementById('messages_pw').classList = `message_failed`;
+                            document.getElementById('messages_pw').innerHTML = `Error: ${data.errors[0].message}`;
+                            document.getElementById('messages_pw').style.opacity = '1';
+                            setTimeout(() => {
+                                document.getElementById('messages_pw').style.opacity = '0';
+                            }, 3000);
+                            return;
+                        }
+                        document.getElementById('messages_pw').classList = `message_success`;
+                        document.getElementById('messages_pw').innerHTML = `E-Mail send`;
+                        document.getElementById('messages_pw').style.opacity = '1';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    }
+                    function getQuery(param) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        return urlParams.get(param) ?? null;
+                    }
+                    function getCookie(name) {
+                        var nameEQ = name + '=';
+                        var ca = document.cookie.split(';');
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+                            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                        }
+                        return null;
+                    }
+                    if (getCookie('auth')) document.getElementById('signupbutton').style.display = 'none';
+                    if (getCookie('auth')) document.getElementById('loginbutton').style.display = 'none';
+                </script>
+                <div class="wrapper flex">
+                    <div class="content maxwidth1400">
+                        <div class="hero flex flex-column text-grey">
+                            <h2>Leaderboard</h2>
+                            <span>Players with the most total earnings won in Cash Matches</span>
+                        </div>
+                        <div class="leaderboard flex flex-column text-grey">
+                            <a class="place-container flex" id="ahref_1">
+                                <div class="place">
+                                    <img src="assets/first-place.svg" alt="leaderboards first place" />
+                                </div>
+                                <div class="player">
+                                    <img alt="profilepicture" src="#" class="profilepicture" id="avatar_1" />
+                                    <h4 id="name_1"></h4>
+                                </div>
+                            </a>
+                            <a class="place-container flex" id="ahref_2">
+                                <div class="place">
+                                    <img src="assets/second-place.svg" alt="leaderboards second place" />
+                                </div>
+                                <div class="player">
+                                    <img alt="profilepicture" src="#" class="profilepicture" id="avatar_2" />
+                                    <h4 id="name_2"></h4>
+                                </div>
+                            </a>
+                            <a class="place-container flex" id="ahref_3">
+                                <div class="place">
+                                    <img src="assets/third-place.svg" alt="leaderboards first place" />
+                                </div>
+                                <div class="player">
+                                    <img alt="profilepicture" src="#" class="profilepicture" id="avatar_3" />
+                                    <h4 id="name_3"></h4>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            async function buildLeaderboard() {
+                let data = await (
+                    await fetch('/api/v1/leaderboard', {
+                        method: 'GET',
+                    })
+                ).json();
+                if (!data.error) {
+                    for (let i = 0; data.length > i; i++) {
+                        if (i == 0 || i == 1 || i == 2) {
+                            const avatar = document.getElementById(`avatar_${i + 1}`);
+                            avatar.src = data[i].avatar ? `/cdn/avatars/${data[i].avatar}` : 'https://play.teleporthq.io/static/svg/default-img.svg';
+                            avatar.style.width = '35px';
+                            avatar.classList = 'profilepicture';
+                            const name = document.getElementById(`name_${i + 1}`);
+                            name.innerHTML = data[i].username;
+                            const ahref = document.getElementById(`ahref_${i + 1}`);
+                            ahref.href = `/profile?id=${data[i].id}`;
+                            ahref.style.color = 'inherit';
+                            continue;
+                        }
+                        const ahref = document.createElement('a');
+                        ahref.href = `/profile?id=${data[i].id}`;
+                        ahref.classList = 'place-container flex';
+                        ahref.style.color = 'inherit';
+                        const ranking_div = document.createElement('div');
+                        ranking_div.classList = 'place';
+                        const player_div = document.createElement('div');
+                        player_div.classList = 'player';
+                        const rankimg = document.createElement('h4');
+                        rankimg.innerHTML = `#${i + 1}`;
+                        const avatar = document.createElement('img');
+                        avatar.src = data[i].avatar ? `/cdn/avatars/${data[i].avatar}` : 'https://play.teleporthq.io/static/svg/default-img.svg';
+                        avatar.style.width = '35px';
+                        avatar.classList = 'profilepicture';
+                        ranking_div.append(rankimg);
+                        player_div.append(avatar);
+                        const name = document.createElement('h4');
+                        name.innerHTML = data[i].username;
+                        player_div.append(name);
+                        ahref.append(ranking_div);
+                        ahref.append(player_div);
+                        document.getElementsByClassName('leaderboard flex flex-column text-grey')[0].append(ahref);
+                    }
+                }
+            }
+            buildLeaderboard();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Terms of Service</title>
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="tos.css" />
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+    </head>
+
+    <body>
+        <header class="primary-header flex">
+            <a href="/start">
+                <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" />
+            </a>
+
+            <button class="mobile-nav-toggle" aria-expanded="false"></button>
+
+            <nav>
+                <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
+                    <li class="pfp display-none text-grey">
+                        <a href="/@me">
+                            <img src="assets/placeholder-pfp.jpeg" alt="profile" />
+                        </a>
+                        <h5 id="balance-mobile" style="margin: auto 0">Balance: $</h5>
+                    </li>
+                    <li class="active">
+                        <a href="/start" class="text-white white-space-nowrap">Home</a>
+                    </li>
+                    <li>
+                        <a href="/cash-matches" class="text-white white-space-nowrap">Cash Matches</a>
+                    </li>
+                    <!--<li>
+                        <a href="/teams" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <!--<li>
+                        <a href="/leaderboard" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <li id="logout" class="flex flex-row" onclick="logout()">
+                        <img src="assets/logout-icon.svg" alt="logout" />
+                        <a href="#" class="text-white white-space-nowrap" id="logout--text">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <a class="ongoing-button button-small" id="ongoingmatchbutton" style="display: none" href="#">BACK TO GAME</a>
+
+            <div class="nav-buttons flex">
+                <button class="login-button button-small" onclick="showLogin()" id="loginbutton">LOG IN</button>
+                <button class="signup-button button-small" onclick="showSignUp()" id="signupbutton">SIGN UP</button>
+            </div>
+
+            <div class="loggedin-menu flex">
+                <button class="noti-toggle"></button>
+                <a onclick="togglePopup()">
+                    <img src="assets/placeholder-pfp.jpeg" class="profile-menu-toggle" alt="profile" />
+                </a>
+            </div>
+            <div class="profile-menu text-grey flex" id="menu_popup">
+                <h5 id="balance">Not Logged In</h5>
+                <div class="ongoing-match" id="profilelink" style="display: none">
+                    <a href="/@me">Profile</a>
+                </div>
+                <div class="logout flex" onclick="logout()" id="logoutbutton" style="display: none">
+                    <img src="assets/logout-icon.svg" alt="" />
+                    <a>Logout</a>
+                </div>
+            </div>
+            <div class="noti-container text-grey" data-visible="false">
+                <h5>Notifications</h5>
+                <div class="noti" id="no-new-noti" style="display: none">
+                    <img src="assets/Inbox.svg" alt="empty inbox" />
+                    <span>No new notifications</span>
+                </div>
+            </div>
+        </header>
+        <div class="wrapper flex">
+            <div class="signup_container">
+                <div class="blocker" onclick="hideSignUp()"></div>
+                <div class="SignUp" id="SignUp">
+                    <label for="" class="close-btn fas fa-times" onclick="hideSignUp()"></label>
+                    <div class="text">Sign Up</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username*</label>
+                            <input type="text" id="username" required />
+                        </div>
+                        <div class="data">
+                            <label>Email*</label>
+                            <input type="email" id="mail" required />
+                        </div>
+                        <div class="data">
+                            <label>Password*</label>
+                            <input name="password" id="password" type="password" onkeyup="check();" required />
+                        </div>
+                        <div class="data">
+                            <label>Repeat Password*</label>
+                            <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                            <div id="message">Passwords do not match!</div>
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="signup()">Sign Up</button>
+                            <div id="signupmessages"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="login_container">
+                <div class="blocker" onclick="hideLogin()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hideLogin()"></label>
+                    <div class="text">Log In</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username</label>
+                            <input type="text" id="username_login" required />
+                        </div>
+                        <div class="data">
+                            <label>Password</label>
+                            <input name="password" id="password_login" type="password" required />
+                        </div>
+                        <span id="forgotPassword">Forgot your password?</span>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" id="loginbutton" onclick="login()">Log In</button>
+                            <div id="messages_login"></div>
+                        </div>
+                        <span>Dont have an account?</span><span id="SignUp-refer" onclick="hideLogin(), showSignUp()">SignUp</span>
+                    </form>
+                </div>
+            </div>
+            <div class="password_container">
+                <div class="blocker" onclick="hidePWReset()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hidePWReset()"></label>
+                    <div class="text">Reset Password</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Email you registered with</label>
+                            <input name="mail" id="mail_pw" type="email" required />
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="resetPW()">Reset Password</button>
+                            <div id="messages_pw"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                const popup_signup = document.querySelector('.signup_container');
+                const popup_login = document.querySelector('.login_container');
+                const popup_reset = document.querySelector('.password_container');
+                function showSignUp() {
+                    popup_signup.classList.add('open');
+                }
+                function hideSignUp() {
+                    popup_signup.classList.remove('open');
+                }
+                function showLogin() {
+                    popup_login.classList.add('open');
+                }
+                function hideLogin() {
+                    popup_login.classList.remove('open');
+                }
+                function showPWReset() {
+                    popup_reset.classList.add('open');
+                }
+                function hidePWReset() {
+                    popup_reset.classList.remove('open');
+                }
+                function logout() {
+                    document.cookie = 'auth=; Max-Age=0';
+                    window.location.href = '/';
+                }
+                function togglePopup() {
+                    document.querySelector('.noti-container').setAttribute('data-visible', false);
+                    if (document.getElementById('menu_popup').style.display == 'none' || document.getElementById('menu_popup').style.display == '')
+                        document.getElementById('menu_popup').style.display = 'block';
+                    else document.getElementById('menu_popup').style.display = 'none';
+                }
+                async function base_data() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/start', {
+                            method: 'GET',
+                        })
+                    ).json();
+                    if (!data.error) {
+                        document.getElementById('balance').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('balance-mobile').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('profilelink').style.display = 'block';
+                        document.getElementById('logoutbutton').style.display = 'block';
+                        if (data.url) {
+                            document.getElementById('ongoingmatchbutton').style.display = 'block';
+                            document.getElementById('ongoingmatchbutton').href = data.url;
+                        }
+                        if (!data.notifications.length) document.getElementById('no-new-noti').style.display = 'block';
+                        for (let i = 0; data.notifications.length > i; i++) {
+                            const noti_parent = document.createElement('div');
+                            noti_parent.classList = 'noti';
+                            noti_parent.id = `delete_noti_${data.notifications[i].id}`;
+                            const text = document.createElement('span');
+                            text.innerHTML = data.notifications[i].string;
+                            const button_parent = document.createElement('div');
+                            button_parent.classList = 'noti-icons flex';
+                            if (data.notifications[i].type == 'TEAM_REQUEST') {
+                                const button = document.createElement('button');
+                                button.classList = 'button-small';
+                                button.innerHTML = 'Accept Invite';
+                                button.setAttribute('onclick', `acceptInvite('${data.notifications[i].metadata.id}', '${data.notifications[i].id}')`);
+                                button_parent.append(button);
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = 'assets/cross.svg';
+                                img.setAttribute('onclick', `read('${data.notifications[i].id}')`);
+                                img.id = 'cross';
+                                button_parent.append(img);
+                            }
+                            noti_parent.append(text);
+                            noti_parent.append(button_parent);
+                            document.getElementsByClassName('noti-container text-grey')[0].append(noti_parent);
+                        }
+                    }
+                }
+                base_data();
+                async function acceptInvite(id, noti_id) {
+                    let data = await (
+                        await fetch(`/api/v1/teams/${id}/join`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    read(noti_id);
+                }
+                async function read(id) {
+                    let data = await (
+                        await fetch(`/api/v1/users/@me/notifications/read/${id}`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    //if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    document.getElementById(`delete_noti_${id}`).remove();
+                }
+                var check = function () {
+                    if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                        document.getElementById('message').style.opacity = '0';
+                        document.getElementById('signup_button').disabled = false;
+                    } else {
+                        document.getElementById('message').style.opacity = '1';
+                        document.getElementById('signup_button').disabled = true;
+                    }
+                };
+                async function signup() {
+                    let data = await (
+                        await fetch('/api/v1/users/create', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username').value,
+                                password: document.getElementById('password').value,
+                                mail: document.getElementById('mail').value,
+                                referal: getQuery('referal'),
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('signupmessages').classList = `message_failed`;
+                        document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('signupmessages').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('signupmessages').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('signupmessages').classList = `message_success`;
+                    document.getElementById('signupmessages').innerHTML = `Account Created`;
+                    document.getElementById('signupmessages').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        document.getElementById('signupmessages').style.opacity = '0';
+                        hideSignUp();
+                    }, 3000);
+                }
+                async function login() {
+                    let data = await (
+                        await fetch('/api/v1/users/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username_login').value,
+                                password: document.getElementById('password_login').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_login').classList = `message_failed`;
+                        document.getElementById('messages_login').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_login').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_login').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_login').classList = `message_success`;
+                    document.getElementById('messages_login').innerHTML = `Logged In`;
+                    document.getElementById('messages_login').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                async function resetPW() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/reset-mail', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                mail: document.getElementById('mail_pw').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_pw').classList = `message_failed`;
+                        document.getElementById('messages_pw').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_pw').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_pw').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_pw').classList = `message_success`;
+                    document.getElementById('messages_pw').innerHTML = `E-Mail send`;
+                    document.getElementById('messages_pw').style.opacity = '1';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                function getQuery(param) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(param) ?? null;
+                }
+                function getCookie(name) {
+                    var nameEQ = name + '=';
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+                if (getCookie('auth')) document.getElementById('signupbutton').style.display = 'none';
+                if (getCookie('auth')) document.getElementById('loginbutton').style.display = 'none';
+            </script>
+            <div class="content maxwidth text-grey flex flex-column">
+                <h2 style="margin: 1em 0; text-align: center">Terms Of Service</h2>
+
+                <h3><b>1. ACCEPTING THESE TERMS</b></h3>
+                <p>
+                    1.1. This document, our rules, policies, and the other documents referenced make up our Terms of Service (“Terms”). <br />
+                    The Terms are a legally binding contract between you and GamermatchGG LLC. <br />
+                    This contract sets out your rights and responsibilities when you use our website. Please read them carefully.
+                </p>
+
+                <h3><b>2. Changes</b></h3>
+                <p>
+                    2.1. GamermatchGG LLC may amend the Terms at any time by posting a revised version on our website. <br />
+                    The revised version will be effective at the time we post it. <br />
+                    If we change the Terms in a way that reduces your rights or increases your responsibilities, we will provide you with a notification.
+                </p>
+
+                <p></p>
+
+                <h3><b>3. ACCESS</b></h3>
+                <p>3.1 You are granted a non-exclusive, limited, and revocable license to access the website and use its functionality on the condition that:</p>
+                <ul>
+                    <li>You are over the age of 13 and have the consent of your parent and/or legal guardian to play;</li>
+                    <li>You only use the website for lawful purposes;</li>
+                    <li>You do not engage in any improper, indecent or offensive behavior while using the website; and</li>
+                    <li>You are not breaking any law in your relevant jurisdiction by accessing this website.</li>
+                </ul>
+
+                <h3><b>4. YOUR DETAILS AND VISITS TO THIS WEBSITE</b></h3>
+                <p>
+                    4.1 When you use this website, you agree to the processing of the information and details and you state that all information and details provided are
+                    true and correspond to reality.
+                </p>
+
+                <h3><b>5. PROHIBITED USES</b></h3>
+                <p>
+                    You may not use, or encourage, promote, facilitate, instructor, induce others to use, the website or website services for any activities that violate
+                    any law, statute, ordinance, or regulation; <br />
+                    For any other illegal or fraudulent purpose or any purpose that is harmful to others; or to transmit, store, display, distribute or otherwise make
+                    available content that is illegal, fraudulent or harmful to others.
+                </p>
+
+                <h3><b>6. SECURITY</b></h3>
+                GamermatchGG LLC ensures the protection and honesty of the data it gathers by <br />
+                <ul>
+                    <li>utilizing fitting authoritative conventions</li>
+                    <li>specialized shields</li>
+                    <li>actual security controls intended to restrict access</li>
+                    <li>identify and forestall the unapproved access</li>
+                    <li>inappropriate divulgence</li>
+                    <li>adjustments</li>
+                    <li>obliteration of the data under its influence</li>
+                </ul>
+
+                <h3><b>7. Conditions of participation</b></h3>
+                <p>
+                    7.1 The prerequisite for using the gaming platform is registered with the organizer. The registration is free of charge.<br />
+                    Multiple registrations by one game participant are not permitted.
+                </p>
+                <p>
+                    7.2 In order to register, the player must complete a registration form. <br />
+                    The player chooses a player name and a password as access data.<br />
+                    The player must provide the data requested in the registration form completely and correctly. It is prohibited to register using extraneous or
+                    otherwise inaccurate information.<br />
+                    The organizer shall confirm receipt of the details submitted to the organizer with the registration by sending an e-mail to the e-mail address
+                    provided by the player during registration.
+                </p>
+                <p>
+                    7.3 If the player subsequently wishes to participate in games with monetary stakes, he must deposit means of payment and corresponding payment data in
+                    the further course.<br />
+                    This can be done at any time and is also free of charge.(Payment provider fees may apply)
+                </p>
+                <p>
+                    7.4 There is no entitlement to the conclusion of a contract of use.<br />
+                    The organizer can reject a registration without giving reasons. In this case, the organizer will delete the transmitted data immediately.
+                </p>
+                <p>7.5 You are over the age of 13 and have the consent of your parent and/or legal guardian to play.</p>
+                <p>
+                    7.6 Any player may be blocked from the gaming platform by the organiser for good cause.<br />
+                    Good cause shall be deemed to exist, in particular, if the virtual betting account is not covered, if a credit check carried out has been negative, if
+                    the player has registered several times, if the player has attempted to influence the outcome of games by unfair means in the past or if there has
+                    been any other serious breach of these General Terms and Conditions, so that further participation in the game by the player is no longer reasonable
+                    for the organiser.
+                </p>
+
+                <h3>8. Performance of games of skill</h3>
+                <p>
+                    8.1 Only players who have the skill level specified in the match announcement or a lower skill level may participate in the matches.<br />
+                    The skill level of a player is determined on a game-by-game basis. It increases and decreases depending on the success of the participant in previous
+                    participations in the specific game.<br />
+                    When participating for the first time, the player starts with the lowest skill level.(does not apply for wagers)
+                </p>
+                <p>
+                    8.2 In real-time games, a maximum of the number of participants specified in the game announcement will participate at the same time.<br />
+                    In the case of certain real-time games, the game will not start until a sufficient number of players have registered for the game. The required number
+                    of players is specified in the game announcement. <br />This is indicated to the player by the number of players required and the number of players
+                    already registered. Up to the start of the game, the player can revoke his participation in the real-time game at any time.<br />
+                    Once the required number of players has been found, the game starts automatically, which is indicated by information on the screen and the transfer of
+                    the stake required for money games.<br />
+                    The winner of the game is the player who has won the game according to the given game rules. After the end of the game, the winner is notified
+                    directly in the game about the outcome of the game and a possible prize.
+                </p>
+
+                <p>
+                    8.3 In the case of time-shifted games, each game participant who registers for a game round after the game has been announced will participate.<br />
+                    Each individual game participant starts his personal game round immediately after his registration, so that all game participants of the gameplay at
+                    different times.<br />
+                    Depending on the game type, the player is entitled to repeat or only one game participation. This distinction is tied to whether repeated
+                    participation in a game round provides a specific advantage. <br />The number of players specified in the match announcement must participate in the
+                    staggered matches. In order to find the necessary players, a validity window is defined for each game offer, in which players can find each other.<br />
+                    Once this number of participants has been reached and all players have completed their game round, the game is over and participation is no longer
+                    possible.<br />
+                    The organizer then determines which game participant has achieved the best result, taking into account the rules of the game.<br />
+                    However, the player is able to unsubscribe from this confirmation mail and only view the information online in the "game account".
+                </p>
+                <p>
+                    8.4 By participating in a game for which a fee is charged, the participants in the game make mutual declarations of intent by which a gaming contract
+                    is concluded. <br />The organizer is the receiving agent for these declarations of intent of the respective other players. When the number of
+                    participants required by the game announcement has been reached, a game contract has been concluded between all participants.<br />
+                    According to the concluded game contract, the winner of the game is the one who has achieved the best result according to the game rules specified by
+                    the organizer.<br />
+                    In the case of a tie in points, the winner is the one who has presented the corresponding score or has been better in other provable game contents.<br />This
+                    is described as the "challenge principle". In case of doubt, the organizer has the right to act as referee to determine the winner.
+                </p>
+                <p>
+                    8.5 If - for example, due to a malfunction - the match is not completed in accordance with the rules, the match shall be deemed not to have taken
+                    place.<br />
+                    The organizer reserves the right to suspend, cancel or postpone the game in whole or in part without prior notice.<br />
+                    This applies if the game cannot be played as scheduled for reasons unforeseeable by the organizer and beyond the organizer's control. <br />
+                    Such circumstances include, but are not limited to, hardware or software failure, the occurrence of a computer virus or program error, unauthorized
+                    third party intervention, and mechanical, technical or legal problems beyond the control and influence of the Promoter.<br />
+                    In such cases, players will be refunded any stakes paid.<br />
+                    If the cancellation of the game is due to the culpable violation of rules by a game participant, the organizer expressly reserves the right to assert
+                    claims, in particular claims for damages. We cannot accept any responsibility for the processing of such personal data by third parties.
+                </p>
+
+                <h3>9. Participation fees and prizes</h3>
+                <p>
+                    9.1 If a participation fee is stated for a match in the invitation to tender, this will be debited from the virtual stake account of the match
+                    participant after the player has registered.
+                </p>
+                <p>
+                    9.2 Unless otherwise stated in the game announcement, the winner of a fee-based game receives 90% of the entry fees paid by the entirety of the
+                    participating game participants as winnings.<br />
+                    10% of the entry fees shall be paid to the organizer as a handling fee for the organization and processing of the game.
+                </p>
+                <p>
+                    9.3 An attempt will be made to credit the winnings to the player's virtual betting account held with GamermatchGG immediately after the result has
+                    been determined. <br />If this is not possible directly for technical reasons, the credit will be carried out again and the winnings will be credited
+                    within 24 hours at the latest.
+                </p>
+
+                <h3>10. General obligations of the players</h3>
+                <p>10.1 Multiple registrations are not permitted.</p>
+                <p>
+                    10.2 The password for the access-protected area of the organizer’s website must be kept strictly secret by the player and changed at regular intervals
+                    (every four weeks at the latest).<br />
+                    If the player violates these duties of care and an unauthorized third party makes dispositions based on knowledge of the required password, the player
+                    shall be liable for any unauthorized use of his/her password made possible by his/her conduct and the associated use of the gaming platform.<br />
+                    As soon as the player becomes aware that his password has become accessible to third parties, he is obliged to change his password immediately.<br />
+                    If this is not possible, the organizer must be informed immediately.
+                </p>
+                <p>
+                    10.3 The aforementioned also applies to the transfer of access data to a third party. Passing on access data is generally not permitted and can lead
+                    to the blocking of the entire player account.
+                </p>
+                <p>
+                    10.4 Any change in the personal data of the player (in particular the account details, address, and e-mail address) must be reported immediately on
+                    the personal settings page.
+                </p>
+
+                <h3>11. ENTIRE AGREEMENT</h3>
+                <p>
+                    This Agreement contains the entire agreement and understanding among the parties hereto with respect to the subject matter hereof, and supersedes all
+                    prior and contemporaneous agreements, understandings, inducements and conditions, express or implied, oral or written, of any nature whatsoever with
+                    respect to the subject matter hereof.
+                </p>
+            </div>
+        </div>
+        <footer class="flex flex-column">
+            <div class="footer-content flex text-white maxwidth">
+                <a href="/start">
+                    <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" id="footer-logo" />
+                </a>
+                <ul class="secondary-navigation">
+                    <li><a href="/start" style="color: white">Home</a></li>
+                    <li><a href="/cash-matches" style="color: white">Cash Matches</a></li>
+                    <!--<li><a href="/leaderboard" style="color: white">Leaderboard</a></li>-->
+                    <!--<li><a href="/profile" style="color: white">Profile</a></li>-->
+                </ul>
+                <ul class="secondary-navigation">
+                    <li><a href="/rules" style="color: white">Rules</a></li>
+                    <li><a href="https://discord.com/invite/gamermatch" style="color: white">Support</a></li>
+                    <li><a href="/privacy" style="color: white">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" style="color: white">Terms of Service</a></li>
+                </ul>
+                <div class="socials flex">
+                    <img alt="Twitter" src="assets/Twitter.png" onclick="window.location.href='https://twitter.com/GamerMatchGG'" />
+                    <img alt="Discord" src="assets/Discord.png" onclick="window.location.href='https://discord.gg/Eb5fqBSSHm'" />
+                </div>
+            </div>
+            <span class="copyright text-grey">© 2023 GamermatchGG</span>
+        </footer>
+    </body>
+</html>

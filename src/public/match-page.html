@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Gamermatch</title>
+        <meta property="og:title" content="Gamermatch" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="/match-page.css" />
+        <link rel="icon" type="image/png" href="/assets/Gamermatch.png" />
+        <script src="nav.js" defer></script>
+        <script src="notification.js" defer></script>
+    </head>
+
+    <body>
+        <header class="primary-header flex">
+            <a href="/start">
+                <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" />
+            </a>
+
+            <button class="mobile-nav-toggle" aria-expanded="false"></button>
+
+            <nav>
+                <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
+                    <li class="pfp display-none text-grey">
+                        <a href="/@me">
+                            <img src="assets/placeholder-pfp.jpeg" alt="profile" />
+                        </a>
+                        <h5 id="balance-mobile" style="margin: auto 0">Balance: $</h5>
+                    </li>
+                    <li class="active">
+                        <a href="/start" class="text-white white-space-nowrap">Home</a>
+                    </li>
+                    <li>
+                        <a href="/cash-matches" class="active text-white white-space-nowrap">Cash Matches</a>
+                    </li>
+                    <!--<li>
+                        <a href="/teams" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <!--<li>
+                        <a href="/leaderboard" class="text-white white-space-nowrap">Leaderboard</a>
+                    </li>-->
+                    <li id="logout" class="flex flex-row" onclick="logout()">
+                        <img src="assets/logout-icon.svg" alt="logout" />
+                        <a href="#" class="text-white white-space-nowrap" id="logout--text">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <a class="ongoing-button button-small" id="ongoingmatchbutton" style="display: none" href="#">BACK TO GAME</a>
+
+            <div class="nav-buttons flex">
+                <button class="login-button button-small" onclick="showLogin()" id="loginbutton">LOG IN</button>
+                <button class="signup-button button-small" onclick="showSignUp()" id="signupbutton">SIGN UP</button>
+            </div>
+
+            <div class="loggedin-menu flex">
+                <button class="noti-toggle"></button>
+                <a onclick="togglePopup()">
+                    <img src="assets/placeholder-pfp.jpeg" class="profile-menu-toggle" alt="profile" />
+                </a>
+            </div>
+            <div class="profile-menu text-grey flex" id="menu_popup">
+                <h5 id="balance">Not Logged In</h5>
+                <div class="ongoing-match" id="profilelink" style="display: none">
+                    <a href="/@me">Profile</a>
+                </div>
+                <div class="logout flex" onclick="logout()" id="logoutbutton" style="display: none">
+                    <img src="assets/logout-icon.svg" alt="" />
+                    <a>Logout</a>
+                </div>
+            </div>
+            <div class="noti-container text-grey" data-visible="false">
+                <h5>Notifications</h5>
+                <div class="noti" id="no-new-noti" style="display: none">
+                    <img src="assets/Inbox.svg" alt="empty inbox" />
+                    <span>No new notifications</span>
+                </div>
+            </div>
+        </header>
+        <div class="wrapper flex">
+            <div class="signup_container">
+                <div class="blocker" onclick="hideSignUp()"></div>
+                <div class="SignUp" id="SignUp">
+                    <label for="" class="close-btn fas fa-times" onclick="hideSignUp()"></label>
+                    <div class="text">Sign Up</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username*</label>
+                            <input type="text" id="username" required />
+                        </div>
+                        <div class="data">
+                            <label>Email*</label>
+                            <input type="email" id="mail" required />
+                        </div>
+                        <div class="data">
+                            <label>Password*</label>
+                            <input name="password" id="password" type="password" onkeyup="check();" required />
+                        </div>
+                        <div class="data">
+                            <label>Repeat Password*</label>
+                            <input name="repeat_password" id="repeat_password" type="password" onkeyup="check();" required />
+                            <div id="message">Passwords do not match!</div>
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="signup()">Sign Up</button>
+                            <div id="signupmessages"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="login_container">
+                <div class="blocker" onclick="hideLogin()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hideLogin()"></label>
+                    <div class="text">Log In</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Username</label>
+                            <input type="text" id="username_login" required />
+                        </div>
+                        <div class="data">
+                            <label>Password</label>
+                            <input name="password" id="password_login" type="password" required />
+                        </div>
+                        <span id="forgotPassword">Forgot your password?</span>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" id="loginbutton" onclick="login()">Log In</button>
+                            <div id="messages_login"></div>
+                        </div>
+                        <span>Dont have an account?</span><span id="SignUp-refer" onclick="hideLogin(), showSignUp()">SignUp</span>
+                    </form>
+                </div>
+            </div>
+            <div class="password_container">
+                <div class="blocker" onclick="hidePWReset()"></div>
+                <div class="Login" id="Login">
+                    <label for="" class="close-btn fas fa-times" onclick="hidePWReset()"></label>
+                    <div class="text">Reset Password</div>
+                    <form action="#">
+                        <div class="data">
+                            <label>Email you registered with</label>
+                            <input name="mail" id="mail_pw" type="email" required />
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="button" onclick="resetPW()">Reset Password</button>
+                            <div id="messages_pw"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                const popup_signup = document.querySelector('.signup_container');
+                const popup_login = document.querySelector('.login_container');
+                const popup_reset = document.querySelector('.password_container');
+                function showSignUp() {
+                    popup_signup.classList.add('open');
+                }
+                function hideSignUp() {
+                    popup_signup.classList.remove('open');
+                }
+                function showLogin() {
+                    popup_login.classList.add('open');
+                }
+                function hideLogin() {
+                    popup_login.classList.remove('open');
+                }
+                function showPWReset() {
+                    popup_reset.classList.add('open');
+                }
+                function hidePWReset() {
+                    popup_reset.classList.remove('open');
+                }
+                function logout() {
+                    document.cookie = 'auth=; Max-Age=0';
+                    window.location.href = '/';
+                }
+                function togglePopup() {
+                    document.querySelector('.noti-container').setAttribute('data-visible', false);
+                    if (document.getElementById('menu_popup').style.display == 'none' || document.getElementById('menu_popup').style.display == '')
+                        document.getElementById('menu_popup').style.display = 'block';
+                    else document.getElementById('menu_popup').style.display = 'none';
+                }
+                async function base_data() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/start', {
+                            method: 'GET',
+                        })
+                    ).json();
+                    if (!data.error) {
+                        document.getElementById('balance').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('balance-mobile').innerHTML = `Balance: $${data.balance.toFixed(2)}`;
+                        document.getElementById('profilelink').style.display = 'block';
+                        document.getElementById('logoutbutton').style.display = 'block';
+                        if (data.url) {
+                            document.getElementById('ongoingmatchbutton').style.display = 'block';
+                            document.getElementById('ongoingmatchbutton').href = data.url;
+                        }
+                        if (!data.notifications.length) document.getElementById('no-new-noti').style.display = 'block';
+                        for (let i = 0; data.notifications.length > i; i++) {
+                            const noti_parent = document.createElement('div');
+                            noti_parent.classList = 'noti';
+                            noti_parent.id = `delete_noti_${data.notifications[i].id}`;
+                            const text = document.createElement('span');
+                            text.innerHTML = data.notifications[i].string;
+                            const button_parent = document.createElement('div');
+                            button_parent.classList = 'noti-icons flex';
+                            if (data.notifications[i].type == 'TEAM_REQUEST') {
+                                const button = document.createElement('button');
+                                button.classList = 'button-small';
+                                button.innerHTML = 'Accept Invite';
+                                button.setAttribute('onclick', `acceptInvite('${data.notifications[i].metadata.id}', '${data.notifications[i].id}')`);
+                                button_parent.append(button);
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = 'assets/cross.svg';
+                                img.setAttribute('onclick', `read('${data.notifications[i].id}')`);
+                                img.id = 'cross';
+                                button_parent.append(img);
+                            }
+                            noti_parent.append(text);
+                            noti_parent.append(button_parent);
+                            document.getElementsByClassName('noti-container text-grey')[0].append(noti_parent);
+                        }
+                    }
+                }
+                base_data();
+                async function acceptInvite(id, noti_id) {
+                    let data = await (
+                        await fetch(`/api/v1/teams/${id}/join`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    read(noti_id);
+                }
+                async function read(id) {
+                    let data = await (
+                        await fetch(`/api/v1/users/@me/notifications/read/${id}`, {
+                            method: 'POST',
+                        })
+                    ).json();
+                    //if (data.error) return alert(`Error: ${data.errors[0].message}`);
+                    document.getElementById(`delete_noti_${id}`).remove();
+                }
+                var check = function () {
+                    if (document.getElementById('password').value == document.getElementById('repeat_password').value) {
+                        document.getElementById('message').style.opacity = '0';
+                        document.getElementById('signup_button').disabled = false;
+                    } else {
+                        document.getElementById('message').style.opacity = '1';
+                        document.getElementById('signup_button').disabled = true;
+                    }
+                };
+                async function signup() {
+                    let data = await (
+                        await fetch('/api/v1/users/create', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username').value,
+                                password: document.getElementById('password').value,
+                                mail: document.getElementById('mail').value,
+                                referal: getQuery('referal'),
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('signupmessages').classList = `message_failed`;
+                        document.getElementById('signupmessages').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('signupmessages').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('signupmessages').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('signupmessages').classList = `message_success`;
+                    document.getElementById('signupmessages').innerHTML = `Account Created`;
+                    document.getElementById('signupmessages').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        document.getElementById('signupmessages').style.opacity = '0';
+                        hideSignUp();
+                    }, 3000);
+                }
+                async function login() {
+                    let data = await (
+                        await fetch('/api/v1/users/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: document.getElementById('username_login').value,
+                                password: document.getElementById('password_login').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_login').classList = `message_failed`;
+                        document.getElementById('messages_login').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_login').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_login').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_login').classList = `message_success`;
+                    document.getElementById('messages_login').innerHTML = `Logged In`;
+                    document.getElementById('messages_login').style.opacity = '1';
+                    document.getElementById('signupbutton').style.display = 'none';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                async function resetPW() {
+                    let data = await (
+                        await fetch('/api/v1/users/@me/reset-mail', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                mail: document.getElementById('mail_pw').value,
+                            }),
+                        })
+                    ).json();
+                    if (data.errors) {
+                        document.getElementById('messages_pw').classList = `message_failed`;
+                        document.getElementById('messages_pw').innerHTML = `Error: ${data.errors[0].message}`;
+                        document.getElementById('messages_pw').style.opacity = '1';
+                        setTimeout(() => {
+                            document.getElementById('messages_pw').style.opacity = '0';
+                        }, 3000);
+                        return;
+                    }
+                    document.getElementById('messages_pw').classList = `message_success`;
+                    document.getElementById('messages_pw').innerHTML = `E-Mail send`;
+                    document.getElementById('messages_pw').style.opacity = '1';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+                function getQuery(param) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(param) ?? null;
+                }
+                function getCookie(name) {
+                    var nameEQ = name + '=';
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+                if (getCookie('auth')) document.getElementById('signupbutton').style.display = 'none';
+                if (getCookie('auth')) document.getElementById('loginbutton').style.display = 'none';
+            </script>
+            <div class="context_menu" style="display: none; position: fixed">
+                <div class="blocker" onclick="hideContextMenu()"></div>
+                <div class="Login" id="context_menu_div">
+                    <label for="" class="close-btn fas fa-times" onclick="hideContextMenu()"></label>
+                    <div class="text" id="context_menu_title"></div>
+                    <br />
+                    <div id="context_menu_small" style="text-align: center"></div>
+                    <div class="btn">
+                        <div class="inner"></div>
+                        <button type="button" id="context_menu_button" style="display: none"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="content maxwidth">
+                <div class="match">
+                    <div class="match-information flex flex-column text-grey">
+                        <h3 id="gamemode">Zone Wars</h3>
+                        <div class="details flex">
+                            <div class="flex flex-column bold">
+                                <span>Pricepool</span>
+                                <span>Teamsize</span>
+                                <span>Region</span>
+                                <span>Platform</span>
+                                <span>First To</span>
+                                <span>Status</span>
+                            </div>
+                            <div class="flex flex-column">
+                                <span id="price"></span>
+                                <span id="size"></span>
+                                <span id="region"></span>
+                                <span id="platform"></span>
+                                <span id="first_to"></span>
+                                <span id="state"></span>
+                            </div>
+                        </div>
+                        <div class="flex flex-column">
+                            <div class="flex" id="timer_div" style="display: none">
+                                <span class="time-left">0:00</span>
+                                <span>- Waiting for opponents</span>
+                            </div>
+                            <button class="ready-up-button button-small" type="button" id="ready_button" onclick="ready()" style="display: none">Ready Up</button>
+                        </div>
+                        <div class="flex flex-column flex-wrap" id="ingame_buttons" style="display: none">
+                            <div class="flex">
+                                <button class="result-button button-small" type="button" onclick="wonModal()">Match Won</button>
+                                <div id="button-divider">
+                                    <span>|</span><br />
+                                    <span>OR</span><br />
+                                    <span>|</span>
+                                </div>
+                                <button class="result-button button-small" type="button" onclick="loseModal()">Match Lost</button>
+                            </div>
+                            <button class="report-button button-small" type="button" onclick="report()">Report</button>
+                        </div>
+                    </div>
+
+                    <!-- Team overview/ lineup -->
+                    <div class="team-overview flex flex-row text-grey">
+                        <div class="team flex flex-column">
+                            <div>
+                                <h4 id="teamname1">Unknown Team</h4>
+                                <a class="forcewin-left staff text-orange" id="teamname1_force" style="display: none">Force Win</a>
+                            </div>
+                            <div class="team-lineup flex flex-column" id="teamlineup1"></div>
+                        </div>
+                        <div class="team flex flex-column">
+                            <div>
+                                <h4 id="teamname2">Unknown Team</h4>
+                                <a class="forcewin-left staff text-orange" id="teamname2_force" style="display: none">Force Win</a>
+                            </div>
+                            <div class="team-lineup flex flex-column" id="teamlineup2"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- shows up when match completed -->
+                <div class="match-done-container" id="match-done-container-won" style="display: none">
+                    <div class="match-done flex flex-column text-grey justify-center">
+                        <!-- Your team won -->
+                        <h2 id="team-won">Your team won</h2>
+                        <span>You earned a total of: <a id="money-earned">$2.00</a></span>
+                        <!-- Return to cash matches button -->
+                        <a href="/cash-matches" class="done-button button-small">Return to Cash Matches</a>
+                    </div>
+                </div>
+                <div class="match-done-container" id="match-done-container-lost" style="display: none">
+                    <div class="match-done flex flex-column text-grey justify-center">
+                        <!-- Your team lost -->
+                        <h2 id="team-won">Your team lost</h2>
+                        <span>Better luck next time</span>
+                        <!-- Return to cash matches button -->
+                        <a href="/cash-matches" class="done-button button-small">Return to Cash Matches</a>
+                    </div>
+                </div>
+
+                <div class="report-text flex text-grey justify-center" style="display: none" id="message_box">
+                    <span>An admin will join the chat soon, if not please open a ticket in our <a href="https://discord.gg/Eb5fqBSSHm">Discord</a></span>
+                </div>
+
+                <div class="staff-panel-container flex flex-column text-grey" style="display: none">
+                    <div class="blocker" onclick="hideBan()"></div>
+                    <div class="ban-popup flex flex-column" id="ban-popup">
+                        <h3>Ban</h3>
+                        <label for="" class="close-btn fas fa-times" onclick="hideBan()"></label>
+                        <div class="team1-pills flex flex-column">
+                            <label for="team1" id="team_name_1_ban">Unknown Team</label>
+                            <div class="flex flex-wrap" id="team_members_1_ban"></div>
+                        </div>
+                        <div class="team2-pills flex flex-column">
+                            <label for="team2" id="team_name_2_ban">Unknown Team</label>
+                            <div class="flex flex-wrap" id="team_members_2_ban"></div>
+                        </div>
+                        <div class="ban-buttons flex flex-column text-grey">
+                            <label for="buttons">Length</label>
+                            <div class="flex">
+                                <button id="1-day-ban" class="ban ban--selected button-small">1 Day</button>
+                                <button id="2-day-ban" class="ban button-small">2 Days</button>
+                                <button id="7-day-ban" class="ban button-small">7 Days</button>
+                                <button id="perma-ban" class="ban button-small">Permanent</button>
+                            </div>
+                        </div>
+                        <button class="confirm-ban-button button-small" type="button" onclick="banUser()">Confirm Ban</button>
+                        <h3>Reset match to running</h3>
+                        <button class="confirm-ban-button button-small" type="button" onclick="changeState()">Confirm Reset</button>
+                    </div>
+                </div>
+
+                <!-- Staff Buttons -->
+                <div class="staff-controls staff flex flex-wrap">
+                    <button class="staff-button button-small" onclick="cancelModal()" style="display: none">Cancel Match</button>
+                    <!-- <button class="staff-button button-small" disabled>Reset Match</button> -->
+                    <button class="staff-button button-small" onclick="showBan()" id="staff_panel_button" style="display: none">Staff Panel</button>
+                </div>
+
+                <!-- Match Chat -->
+                <div class="chat flex flex-column text-grey">
+                    <div class="date flex flex-column chat-maxwidth">
+                        <span class="day">Today</span>
+                    </div>
+                    <div class="chatbox chat-maxwidth">
+                        <span class="server-message">Match started</span>
+                    </div>
+                    <div class="send-message flex chat-maxwidth">
+                        <input type="text" placeholder="Write a message" class="input chat-input" />
+                        <img src="assets/arrow.svg" class="send-icon" alt="send message icon" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="flex flex-column">
+            <div class="footer-content flex text-white maxwidth">
+                <a href="/start">
+                    <img src="assets/Gamermatch.png" alt="Gamermatch Logo" loading="eager" class="logo" id="footer-logo" />
+                </a>
+                <ul class="secondary-navigation">
+                    <li><a href="/start" style="color: white">Home</a></li>
+                    <li><a href="/cash-matches" style="color: white">Cash Matches</a></li>
+                    <!--<li><a href="/leaderboard" style="color: white">Leaderboard</a></li>-->
+                    <!--<li><a href="/profile" style="color: white">Profile</a></li>-->
+                </ul>
+                <ul class="secondary-navigation">
+                    <li><a href="/rules" style="color: white">Rules</a></li>
+                    <li><a href="https://discord.com/invite/gamermatch" style="color: white">Support</a></li>
+                    <li><a href="/privacy" style="color: white">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" style="color: white">Terms of Service</a></li>
+                </ul>
+                <div class="socials flex">
+                    <img alt="Twitter" src="assets/Twitter.png" href="https://twitter.com/GamerMatchGG" />
+                    <img alt="Discord" src="assets/Discord.png" href="https://discord.gg/Eb5fqBSSHm" />
+                </div>
+            </div>
+            <span class="copyright text-grey">© 2023 GamermatchGG</span>
+        </footer>
+        <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
+            integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script>
+            var userdata;
+            var wagerdata;
+            var wager_member;
+            var countdown_timer;
+            async function fetchinitialdata() {
+                let data = await (
+                    await fetch('/api/v1/users/@me', {
+                        method: 'GET',
+                    })
+                ).json();
+                userdata = data;
+                load();
+                socket();
+            }
+            fetchinitialdata();
+            function getCookie(name) {
+                var nameEQ = name + '=';
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+            function getQuery(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param) ?? null;
+            }
+            async function load() {
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}`, {
+                        method: 'GET',
+                    })
+                ).json();
+                if (!data) return (window.location.href = '/cash-matches');
+                wagerdata = data;
+                wager_member = data.members.find(i => i.id == userdata.id);
+                document.getElementById('gamemode').innerHTML = data.type;
+                document.getElementById('price').innerHTML = `$${data.fee}`;
+                document.getElementById('size').innerHTML = `${data.size}v${data.size}`;
+                document.getElementById('region').innerHTML = data.region;
+                document.getElementById('platform').innerHTML = data.platforms;
+                document.getElementById('first_to').innerHTML = data.first_to ?? 'Not available (old match)';
+                document.getElementById('state').innerHTML = data.state;
+                if (
+                    (wager_member && (data.state == 'running' || data.state == 'waiting')) ||
+                    (userdata.role == 'admin' && (data.state == 'running' || data.state == 'waiting'))
+                )
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'block';
+                if (userdata.role == 'admin') document.getElementById('staff_panel_button').style.display = 'block';
+                if (data.state == 'running') document.getElementById('ingame_buttons').style.display = 'flex';
+                if (data.state != 'waiting') document.getElementById('ready_button').style.display = 'none';
+                if (data.state == 'waiting') document.getElementById('ready_button').style.display = 'block';
+                document.getElementsByClassName('staff-button button-small')[0].innerHTML = `Cancel Match`;
+                if (data.state == 'disputed') document.getElementById('message_box').style.display = 'box';
+                if (data.state == 'ended') {
+                    if (wager_member && wager_member.team == wagerdata.winner[0].id) {
+                        document.getElementById('match-done-container-won').style.display = 'block';
+                        document.getElementById('money-earned').innerHTML = `$${wagerdata.fee * 2 * 0.8}`;
+                    }
+                    if (wager_member && wager_member.team != wagerdata.winner[0].id) {
+                        document.getElementById('match-done-container-lost').style.display = 'block';
+                    }
+                }
+                if (data.timer) {
+                    timer(data.timer);
+                    document.getElementById('timer_div').style.display = 'block';
+                }
+                for (let i = 0; data.teamids.joined.length > i; i++) {
+                    generateTeams(data.teamids.joined[i], i);
+                }
+                for (let i = 0; data.chat.length > i; i++) {
+                    generateChat(data.chat[i]);
+                }
+                document.getElementsByClassName('day')[0].innerHTML = data.chat[0]?.date?.formatted ?? 'Today';
+                enableListener();
+            }
+            function generateTeams(teams_data, i) {
+                const members_from_team = wagerdata.members.filter(k => k.team == teams_data.id);
+                document.getElementById(`teamname${i + 1}`).innerHTML = members_from_team[0].hidden ? 'Hidden' : teams_data.name;
+                document.getElementById(`team_name_${i + 1}_ban`).innerHTML = teams_data.name;
+                if (['running', 'disputed'].some(i => i == wagerdata.state) && userdata.role == 'admin') {
+                    document.getElementById(`teamname${i + 1}_force`).style.display = 'block';
+                    document.getElementById(`teamname${i + 1}_force`).setAttribute('onclick', `forceWin('${teams_data.id}')`);
+                }
+                for (let k = 0; members_from_team.length > k; k++) {
+                    const playerinfo = document.createElement('div');
+                    playerinfo.classList = 'player flex flex-row';
+                    const avatar = document.createElement('img');
+                    avatar.src =
+                        members_from_team[k].avatar && !members_from_team[k].hidden
+                            ? `/cdn/avatars/${members_from_team[k].avatar}`
+                            : 'https://play.teleporthq.io/static/svg/default-img.svg';
+                    avatar.classList = 'profilepicture';
+                    const metadata = document.createElement('div');
+                    metadata.classList = 'names flex flex-column';
+                    const username = document.createElement('a');
+                    username.style.color = 'inherit';
+                    username.id = `user_${members_from_team[k].id}`;
+                    username.classList = 'username';
+                    username.innerHTML = members_from_team[k].username;
+                    username.href = `/profile?id=${members_from_team[k].id}`;
+                    username.target = '_blank';
+                    if (members_from_team[k].ready) {
+                        const ready = document.createElement('a');
+                        ready.classList = 'username';
+                        ready.style.color = '#ec4e20ff';
+                        ready.style.marginLeft = '20px';
+                        ready.innerHTML = 'Ready';
+                        username.append(ready);
+                    }
+                    const epic_name = document.createElement('a');
+                    const connection = members_from_team[k].connections.find(l => l.game == 'Fortnite');
+                    epic_name.classList = 'epicgames-username';
+                    epic_name.style.color = 'inherit';
+                    epic_name.href = connection ? `https://fortnitetracker.com/profile/all/${connection.id}` : null;
+                    epic_name.target = connection ? '_blank' : null;
+                    epic_name.innerHTML = connection ? connection.id : 'Hidden';
+                    metadata.append(username);
+                    metadata.append(epic_name);
+                    playerinfo.append(avatar);
+                    playerinfo.append(metadata);
+                    document.getElementById(`teamlineup${i + 1}`).append(playerinfo);
+
+                    const ban_button = document.createElement('button');
+                    ban_button.id = `ban_${members_from_team[k].id}`;
+                    ban_button.classList = 'pill';
+                    ban_button.innerHTML = members_from_team[k].username;
+                    document.getElementById(`team_members_${i + 1}_ban`).append(ban_button);
+                }
+            }
+            function hideContextMenu() {
+                document.getElementById('context_menu_title').innerHTML = '';
+                document.getElementById('context_menu_small').innerHTML = '';
+                document.getElementById('context_menu_button').style.display = 'none';
+                document.getElementById('context_menu_button').removeAttribute('onclick');
+                document.getElementById('context_menu_button').innerHTML = '';
+                document.querySelector('.context_menu').classList.remove('open');
+            }
+            function generateChat(chat) {
+                moment.locale(window.navigator.userLanguage || window.navigator.language);
+                if (chat.id == userdata.id && chat.type == 'MESSAGE_USER') {
+                    const msgparent = document.createElement('div');
+                    msgparent.classList = 'message-right message';
+                    const msgbox = document.createElement('div');
+                    msgbox.classList = 'message-container flex flex-column';
+                    const msgmeta = document.createElement('div');
+                    msgmeta.classList = 'name-date name-date-right flex';
+                    const msgdate = document.createElement('span');
+                    msgdate.classList = 'message-date';
+                    msgdate.innerHTML = moment(chat.date.raw).format('LLLL');
+                    const msguser = document.createElement('span');
+                    msguser.classList = 'username';
+                    if (chat.role == 'admin' && !wagerdata.members.some(i => i.id == chat.id)) {
+                        msguser.innerHTML = `[ADMIN] ${chat.username}`;
+                        msguser.style.color = '#ec4e20';
+                    } else if (chat.role == 'mod' && !wagerdata.members.some(i => i.id == chat.id)) {
+                        msguser.innerHTML = `[MOD] ${chat.username}`;
+                        msguser.style.color = '#00ff00';
+                    } else {
+                        msguser.innerHTML = chat.username;
+                    }
+                    msgmeta.append(msguser);
+                    msgmeta.append(msgdate);
+                    const msgcontent = document.createElement('p');
+                    msgcontent.classList = 'message-text';
+                    msgcontent.innerHTML = chat.message;
+                    msgbox.append(msgmeta);
+                    msgbox.append(msgcontent);
+                    const avatar = document.createElement('img');
+                    avatar.classList = 'profilepicture';
+                    avatar.src = chat.avatar ? `/cdn/avatars/${chat.avatar}` : 'https://play.teleporthq.io/static/svg/default-img.svg';
+                    msgparent.append(avatar);
+                    msgparent.append(msgbox);
+                    document.getElementsByClassName('chatbox chat-maxwidth')[0].append(msgparent);
+                }
+                if (chat.id != userdata.id && chat.type == 'MESSAGE_USER') {
+                    const msgparent = document.createElement('div');
+                    msgparent.classList = 'message-left message';
+                    const msgbox = document.createElement('div');
+                    msgbox.classList = 'message-container flex flex-column';
+                    const msgmeta = document.createElement('div');
+                    msgmeta.classList = 'name-date flex';
+                    const msgdate = document.createElement('span');
+                    msgdate.classList = 'message-date';
+                    msgdate.innerHTML = moment(chat.date.raw).format('LLLL');
+                    const msguser = document.createElement('span');
+                    msguser.classList = 'username';
+                    if (chat.role == 'admin' && !wagerdata.members.some(i => i.id == chat.id)) {
+                        msguser.innerHTML = `[ADMIN] ${chat.username}`;
+                        msguser.style.color = '#ec4e20';
+                    } else if (chat.role == 'mod' && !wagerdata.members.some(i => i.id == chat.id)) {
+                        msguser.innerHTML = `[MOD] ${chat.username}`;
+                        msguser.style.color = '#00ff00';
+                    } else {
+                        msguser.innerHTML = chat.username;
+                    }
+                    msgmeta.append(msguser);
+                    msgmeta.append(msgdate);
+                    const msgcontent = document.createElement('p');
+                    msgcontent.classList = 'message-text';
+                    msgcontent.innerHTML = chat.message;
+                    msgbox.append(msgmeta);
+                    msgbox.append(msgcontent);
+                    const avatar = document.createElement('img');
+                    avatar.classList = 'profilepicture';
+                    avatar.src = chat.avatar ? `/cdn/avatars/${chat.avatar}` : 'https://play.teleporthq.io/static/svg/default-img.svg';
+                    msgparent.append(avatar);
+                    msgparent.append(msgbox);
+                    document.getElementsByClassName('chatbox chat-maxwidth')[0].append(msgparent);
+                }
+                if (chat.type == 'SYSTEM') {
+                    const server_message = document.createElement('span');
+                    server_message.classList = 'server-message';
+                    server_message.innerHTML = chat.message;
+                    const timestamp = document.createElement('small');
+                    timestamp.innerHTML = `(${moment(chat.date.raw).format('LLLL')})`;
+                    timestamp.style.marginLeft = '10px';
+                    timestamp.style.fontSize = '8px';
+                    timestamp.style.color = 'white';
+                    server_message.append(timestamp);
+                    document.getElementsByClassName('chatbox chat-maxwidth')[0].append(server_message);
+                }
+                document.getElementsByClassName('chatbox chat-maxwidth')[0].scrollTop = document.getElementsByClassName('chatbox chat-maxwidth')[0].scrollHeight;
+            }
+            document.getElementsByClassName('input chat-input')[0].addEventListener('keyup', async function (event) {
+                if (event.keyCode === 13) {
+                    sendMessage();
+                }
+            });
+            async function sendMessage() {
+                if (!document.getElementsByClassName('input chat-input')[0].value.length) return alert("You can't send an empty message");
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}/chat`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: document.getElementsByClassName('input chat-input')[0].value,
+                        }),
+                    })
+                ).json();
+                if (data.errors) return alert('Error: ' + data.errors[0].message);
+                document.getElementsByClassName('input chat-input')[0].value = '';
+            }
+            async function cancel() {
+                const team = wager_member ? userdata.teams.find(i => wager_member.team == i.id) : null;
+                if (!team && userdata.role != 'admin') return;
+                if (wagerdata.state == 'cancelled') return;
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}/cancel`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({team: team?.id ?? 'admin'}),
+                    })
+                ).json();
+                if (data.errors) return alert('Error: ' + data.errors[0].message);
+                hideContextMenu();
+            }
+            async function ready() {
+                const team = userdata.teams.find(i => wagerdata.teamids.joined.some(k => k.id == i.id));
+                if (!team) return;
+                if (wagerdata.state != 'waiting') return;
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}/ready`, {
+                        method: 'GET',
+                    })
+                ).json();
+            }
+            async function socket() {
+                var socket = io({
+                    auth: {
+                        type: 'game',
+                        id: getQuery('id'),
+                        user_id: userdata.id,
+                        auth: getCookie('auth'),
+                    },
+                });
+                socket.on('NEW_CHAT_MESSAGE', msg => {
+                    generateChat(msg);
+                });
+                socket.on('WAGER_CANCELLED', msg => {
+                    document.getElementById('ingame_buttons').style.display = 'none';
+                    document.getElementById('ready_button').style.display = 'none';
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'none';
+                    document.getElementById('state').innerHTML = msg.state;
+                    wagerdata.state = msg.state;
+                    document.getElementById('timer_div').style.display = 'none';
+                    document.getElementById('teamname1_force').style.display = 'none';
+                    document.getElementById('teamname2_force').style.display = 'none';
+                });
+                socket.on('WAGER_JOINED', msg => {
+                    document.getElementById(`teamlineup1`).innerHTML = '';
+                    document.getElementById(`teamlineup2`).innerHTML = '';
+                    document.getElementById(`teamname1`).innerHTML = '';
+                    document.getElementById(`teamname2`).innerHTML = '';
+                    document.getElementById(`team_name_1_ban`).innerHTML = '';
+                    document.getElementById(`team_name_2_ban`).innerHTML = '';
+                    document.getElementById(`team_members_1_ban`).innerHTML = '';
+                    document.getElementById(`team_members_2_ban`).innerHTML = '';
+                    document.getElementById(`teamname1_force`).innerHTML = '';
+                    document.getElementById(`teamname2_force`).innerHTML = '';
+                    document.getElementById('ready_button').style.display = 'block';
+                    wagerdata.teamids.joined.push(msg.team);
+                    msg.members.forEach(i => wagerdata.members.push(i));
+                    for (let i = 0; wagerdata.teamids.joined.length > i; i++) {
+                        generateTeams(wagerdata.teamids.joined[i], i);
+                    }
+                    if (msg.timer) {
+                        timer(msg.timer);
+                        document.getElementById('timer_div').style.display = 'block';
+                    }
+                    const audio = new Audio('https://gamermatch.gg/join.mp3');
+                    audio.play();
+                });
+                socket.on('WAGER_TIMER', msg => {
+                    timer(msg.timer);
+                    document.getElementById('timer_div').style.display = 'block';
+                });
+                socket.on('WAGER_READY', msg => {
+                    if (document.getElementById(`user_${msg.id}`)) {
+                        const readybadge = document.createElement('a');
+                        readybadge.classList = 'username';
+                        readybadge.style.color = '#ec4e20ff';
+                        readybadge.style.marginLeft = '20px';
+                        readybadge.innerHTML = 'Ready';
+                        document.getElementById(`user_${msg.id}`).append(readybadge);
+                        wagerdata.members.find(i => i.id == userdata.id).ready = true;
+                    }
+                    if (msg.enemys && wager_member.team != msg.enemys.team) {
+                        wagerdata.members = wagerdata.members.filter(i => i.id != 'Hidden');
+                        msg.enemys.members.forEach(i => wagerdata.members.push(i));
+                        document.getElementById(`teamlineup1`).innerHTML = '';
+                        document.getElementById(`teamlineup2`).innerHTML = '';
+                        document.getElementById(`teamname1`).innerHTML = '';
+                        document.getElementById(`teamname2`).innerHTML = '';
+                        document.getElementById(`team_name_1_ban`).innerHTML = '';
+                        document.getElementById(`team_name_2_ban`).innerHTML = '';
+                        document.getElementById(`team_members_1_ban`).innerHTML = '';
+                        document.getElementById(`team_members_2_ban`).innerHTML = '';
+                        document.getElementById(`teamname1_force`).innerHTML = '';
+                        document.getElementById(`teamname2_force`).innerHTML = '';
+                        for (let i = 0; wagerdata.teamids.joined.length > i; i++) {
+                            generateTeams(wagerdata.teamids.joined[i], i);
+                        }
+                    }
+                });
+                socket.on('WAGER_DISPUTED', msg => {
+                    document.getElementById('ingame_buttons').style.display = 'none';
+                    document.getElementById('ready_button').style.display = 'none';
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'none';
+                    document.getElementById('state').innerHTML = msg.state;
+                    wagerdata.state = msg.state;
+                    document.getElementById('timer_div').style.display = 'none';
+                    report();
+                    clearInterval(timer);
+                    timer = null;
+                });
+                socket.on('WAGER_END', msg => {
+                    document.getElementById('ingame_buttons').style.display = 'none';
+                    document.getElementById('ready_button').style.display = 'none';
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'none';
+                    document.getElementById('state').innerHTML = msg.state;
+                    wagerdata.state = msg.state;
+                    if (wager_member && wager_member.team == msg.winner) {
+                        document.getElementById('match-done-container-won').style.display = 'block';
+                        document.getElementById('money-earned').innerHTML = `$${wagerdata.fee * 2 * 0.8}`;
+                    }
+                    if (wager_member && wager_member.team != msg.winner) {
+                        document.getElementById('match-done-container-lost').style.display = 'block';
+                    }
+                    document.getElementById('timer_div').style.display = 'none';
+                    document.getElementById('teamname1_force').style.display = 'none';
+                    document.getElementById('teamname2_force').style.display = 'none';
+                    clearInterval(timer);
+                    timer = null;
+                });
+                socket.on('WAGER_RUNNING', msg => {
+                    document.getElementById('timer_div').style.display = 'none';
+                    document.getElementById('ingame_buttons').style.display = 'flex';
+                    document.getElementById('ready_button').style.display = 'none';
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'none';
+                    document.getElementById('state').innerHTML = msg.state;
+                    wagerdata.state = msg.state;
+                    clearInterval(timer);
+                    timer = null;
+                });
+                socket.on('WAGER_RESET', msg => {
+                    document.getElementById('timer_div').style.display = 'none';
+                    document.getElementById('ingame_buttons').style.display = 'flex';
+                    document.getElementById('ready_button').style.display = 'none';
+                    document.getElementsByClassName('staff-button button-small')[0].style.display = 'none';
+                    document.getElementById('state').innerHTML = msg.state;
+                    wagerdata.state = msg.state;
+                    document.getElementById('match-done-container-won').style.display = 'none';
+                    document.getElementById('match-done-container-lost').style.display = 'none';
+                    if (userdata.role == 'admin') {
+                        document.getElementById('teamname1_force').style.display = 'block';
+                        document.getElementById('teamname2_force').style.display = 'block';
+                        document.getElementById('teamname1_force').setAttribute('onclick', `forceWin('${wagerdata.teamids.joined[0].id}')`);
+                        document.getElementById('teamname2_force').setAttribute('onclick', `forceWin('${wagerdata.teamids.joined[1].id}')`);
+                    }
+                });
+            }
+            function report() {
+                document.getElementsByClassName('report-text')[0].style.display = 'flex';
+                document.getElementById('ingame_buttons').style.display = 'none';
+            }
+            function enableListener() {
+                document.querySelectorAll('.pill').forEach(pill => {
+                    pill.addEventListener('click', () => {
+                        pill.classList.toggle('pill--selected');
+                        document.querySelectorAll('.pill').forEach(k => {
+                            if (k.classList.contains('pill--selected') && k.id != pill.id) k.classList.toggle('pill--selected');
+                        });
+                    });
+                });
+                document.querySelectorAll('.ban').forEach(ban => {
+                    ban.addEventListener('click', () => {
+                        ban.classList.toggle('ban--selected');
+                        document.querySelectorAll('.ban').forEach(k => {
+                            if (k.classList.contains('ban--selected') && k.id != ban.id) k.classList.toggle('ban--selected');
+                        });
+                    });
+                });
+            }
+            async function wonModal() {
+                document.getElementById('context_menu_title').innerHTML = 'Confirm Win';
+                document.getElementById('context_menu_small').innerHTML = 'Click on the button below to confirm that you won the match';
+                document.getElementById('context_menu_button').innerHTML = 'Confirm';
+                document.getElementById('context_menu_button').style.display = 'block';
+                document.getElementById('context_menu_button').setAttribute('onclick', `won()`);
+                document.querySelector('.context_menu').classList.add('open');
+            }
+            async function loseModal() {
+                document.getElementById('context_menu_title').innerHTML = 'Confirm Lose';
+                document.getElementById('context_menu_small').innerHTML = 'Click on the button below to confirm that you lost the match';
+                document.getElementById('context_menu_button').innerHTML = 'Confirm';
+                document.getElementById('context_menu_button').style.display = 'block';
+                document.getElementById('context_menu_button').setAttribute('onclick', `lose()`);
+                document.querySelector('.context_menu').classList.add('open');
+            }
+            async function cancelModal() {
+                document.getElementById('context_menu_title').innerHTML = 'Confirm Cancel';
+                document.getElementById('context_menu_small').innerHTML = 'Click on the button below to confirm that you really want to cancel this match';
+                document.getElementById('context_menu_button').innerHTML = 'Confirm';
+                document.getElementById('context_menu_button').style.display = 'block';
+                document.getElementById('context_menu_button').setAttribute('onclick', `cancel()`);
+                document.querySelector('.context_menu').classList.add('open');
+            }
+            async function won() {
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}/results`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            winner: wager_member.team,
+                        }),
+                    })
+                ).json();
+                hideContextMenu();
+            }
+            async function lose() {
+                let data = await (
+                    await fetch(`/api/v1/wagers/${getQuery('id')}/results`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            winner: wagerdata.teamids.joined.find(i => i.id != wager_member.team).id,
+                        }),
+                    })
+                ).json();
+                hideContextMenu();
+            }
+            async function forceWin(team) {
+                let data = await (
+                    await fetch(`/admin/wagers/${wagerdata.id}/force-win`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            team,
+                        }),
+                    })
+                ).json();
+                if (data.errors) return alert('Error: ' + data.errors[0].message);
+            }
+            async function banUser(team) {
+                if (!document.getElementsByClassName('pill--selected').length) alert('Please select a user you want to ban');
+                if (!document.getElementsByClassName('ban--selected').length) alert('Please select the length of the ban');
+                let length = document.getElementsByClassName('ban--selected')[0].id.split('-')[0];
+                length = length == 'perma' ? 157788000 : length * 86400;
+                let data = await (
+                    await fetch(`/admin/users/${document.getElementsByClassName('pill--selected')[0].id.split('_')[1]}/update`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            banned: {
+                                status: true,
+                                until: new Date((Math.floor(Date.now() / 1000) + length) * 1000),
+                            },
+                        }),
+                    })
+                ).json();
+                hideBan();
+            }
+            async function changeState() {
+                if (wagerdata.state != 'disputed' && wagerdata.state != 'ended')
+                    return alert("You can't change the wager state if it's not in 'ended' or 'disputed' state");
+                let data = await (
+                    await fetch(`/admin/wagers/${wagerdata.id}/reset`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({}),
+                    })
+                ).json();
+                if (data.errors) alert(`Error: ${data.errors[0].message}`);
+                hideBan();
+            }
+            function timer(date) {
+                date = new Date(date).getTime();
+                countdown_timer = setInterval(function () {
+                    var now = new Date().getTime();
+                    var distance = new Date(date) - now;
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    document.getElementsByClassName('time-left')[0].innerHTML = `${minutes}:${seconds <= 9 ? `0${seconds}` : seconds}`;
+                    if (distance < 0) {
+                        clearInterval(countdown_timer);
+                        document.getElementsByClassName('time-left')[0].innerHTML = 'EXPIRED';
+                    }
+                }, 1000);
+            }
+            const popup_ban = document.querySelector('.staff-panel-container');
+            function showBan() {
+                popup_ban.classList.add('open');
+            }
+            function hideBan() {
+                popup_ban.classList.remove('open');
+            }
+        </script>
+        <script src="socket-io.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"
+            integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script></script>
+    </body>
+</html>
